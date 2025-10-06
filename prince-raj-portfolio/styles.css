@@ -194,6 +194,9 @@ a:hover { opacity: 0.9; }
   margin-top: 22px;
 }
 .meta-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
   display: flex;
   flex-wrap: wrap;
   gap: 8px 12px;
