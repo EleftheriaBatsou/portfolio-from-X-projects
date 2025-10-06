@@ -1,17 +1,20 @@
 /* Year */
 document.getElementById('year').textContent = new Date().getFullYear();
 
-/* Theme toggle */
+/* Theme toggle (uses data-theme for clean CSS-based theming) */
 const toggle = document.getElementById('themeToggle');
-let dark = true;
+function isDark() {
+  return document.body.dataset.theme !== 'light';
+}
+function applyTheme(light = false) {
+  document.body.dataset.theme = light ? 'light' : 'dark';
+  toggle.textContent = light ? '☼' : '☾';
+}
 toggle.addEventListener('click', () => {
-  dark = !dark;
-  document.documentElement.style.setProperty('--bg', dark ? '#0b0f1a' : '#f6f7fb');
-  document.body.style.background = dark
-    ? 'radial-gradient(1200px 600px at 10% 10%, #0f162a 0%, #0b0f1a 35%, #0b0f1a 100%)'
-    : 'radial-gradient(1000px 600px at 10% 10%, #ffffff 0%, #f6f7fb 35%, #eef1f7 100%)';
-  toggle.textContent = dark ? '☾' : '☼';
+  applyTheme(isDark());
 });
+/* Initialize */
+applyTheme(false);
 
 /* Subtle starfield background */
 const canvas = document.getElementById('bg');
