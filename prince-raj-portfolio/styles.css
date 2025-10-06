@@ -154,7 +154,7 @@ a:hover { opacity: 0.9; }
 /* Hero */
 .hero {
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
+  grid-template-columns: 1fr;
   gap: 24px;
   align-items: center;
 }
@@ -376,15 +376,13 @@ blockquote { margin: 8px 0 0; color: var(--text); opacity: 0.9; }
 /* Activity */
 .activity-grid {
   display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
+  grid-template-columns: 1fr;
   gap: 18px;
   align-items: start;
 }
-.activity-graph img {
-  width: 100%;
-  display: block;
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
+.activity-feed {
+  max-width: 820px;
+  margin: 0 auto;
 }
 .feed {
   list-style: none;
