@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Muhammed Sabith — Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Portfolio of Muhammed Sabith (masterdevsabith) — Full‑stack developer and content creator." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css">
+  <link rel="icon" href="https://github.com/masterdevsabith.png" />
+</head>
+<body>
+  <div class="noise"></div>
+
+  <header class="site-header">
+    <nav class="nav">
+      <a class="brand" href="#home">MS</a>
+      <div class="nav-links">
+        <a href="#work">Work</a>
+        <a href="#stack">Stack</a>
+        <a href="#github">GitHub</a>
+        <a href="#youtube">YouTube</a>
+        <a href="#contact" class="accent">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="home" class="hero">
+    <div class="hero-content">
+      <div class="avatar-wrap">
+        <img class="avatar" src="https://github.com/masterdevsabith.png" alt="Avatar of Muhammed Sabith" />
+        <span class="glow-ring"></span>
+      </div>
+      <h1>
+        Muhammed <span class="accent">Sabith</span>
+      </h1>
+      <p class="tagline">
+        Full‑stack developer • Open source contributor • Content creator
+      </p>
+      <div class="socials">
+        <a class="social-btn" href="https://github.com/masterdevsabith" target="_blank" rel="noopener">GitHub</a>
+        <a class="social-btn" href="https://instagram.com/sabiiii.fx" target="_blank" rel="noopener">Instagram</a>
+        <a class="social-btn" href="https://youtube.com/@sabiiiiifx" target="_blank" rel="noopener">YouTube</a>
+        <a class="social-btn" href="https://linkedin.com/in/muhammed-sabith-431194370" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+      <div class="hero-cta">
+        <a class="primary-btn" href="#work">View Projects</a>
+        <a class="secondary-btn" href="#contact">Get in touch</a>
+      </div>
+    </div>
+    <div class="hero-bg">
+      <div class="gradient"></div>
+      <div class="grid"></div>
+    </div>
+  </main>
+
+  <section id="work" class="section">
+    <div class="section-head">
+      <h2>Featured <span class="accent">Work</span></h2>
+      <p>Recent projects and experiments.</p>
+    </div>
+    <div class="cards" id="featured-projects">
+      <!-- Static showcases; you can replace with your highlights -->
+      <article class="card">
+        <div class="card-head">
+          <h3>OpenCut</h3>
+          <span class="badge">Open Source</span>
+        </div>
+        <p>An open-source alternative to CapCut. Contributions toward a community-driven video editor.</p>
+        <div class="card-actions">
+          <a class="chip" href="https://github.com/search?q=OpenCut+user%3Amasterdevsabith&amp;type=repositories" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-head">
+          <h3>depcheck-cli</h3>
+          <span class="badge">CLI</span>
+        </div>
+        <p>Node.js tool to analyze project dependencies and find unused/deprecated packages.</p>
+        <div class="card-actions">
+          <a class="chip" href="https://github.com/masterdevsabith/depcheck-cli" target="_blank" rel="noopener">Repository</a>
+          <a class="chip" href="https://www.npmjs.com/search?q=depcheck-cli" target="_blank" rel="noopener">npm</a>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-head">
+          <h3>CyberSecurity SaaS</h3>
+          <span class="badge">SaaS</span>
+        </div>
+        <p>Currently building a security-focused SaaS product. Open to collaboration and feedback.</p>
+        <div class="card-actions">
+          <a class="chip" href="#contact">Collaborate</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="stack" class="section">
+    <div class="section-head">
+      <h2>Tech <span class="accent">Stack</span></h2>
+      <p>Tools and technologies I use.</p>
+    </div>
+    <div class="stack">
+      <div class="stack-col">
+        <h3>Frontend</h3>
+        <ul>
+          <li>Next.js</li>
+          <li>React</li>
+          <li>Tailwind CSS</li>
+          <li>SASS</li>
+          <li>Bootstrap</li>
+        </ul>
+      </div>
+      <div class="stack-col">
+        <h3>Backend</h3>
+        <ul>
+          <li>Node.js / Express / Nest.js</li>
+          <li>Django</li>
+          <li>Supabase</li>
+        </ul>
+      </div>
+      <div class="stack-col">
+        <h3>DevTools</h3>
+        <ul>
+          <li>Git / GitHub</li>
+          <li>Vercel / Render</li>
+          <li>Postman</li>
+          <li>Figma / Adobe Suite</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="github" class="section">
+    <div class="section-head">
+      <h2>GitHub <span class="accent">Activity</span></h2>
+      <p>Latest repositories and stats.</p>
+    </div>
+
+    <div class="github-stats">
+      <img alt="GitHub Stats" src="https://github-readme-stats.vercel.app/api?username=masterdevsabith&amp;theme=gotham&amp;hide_border=false&amp;include_all_commits=true&amp;count_private=true" />
+      <img alt="Streak Stats" src="https://nirzak-streak-stats.vercel.app/?user=masterdevsabith&amp;theme=gotham&amp;hide_border=false" />
+      <img alt="Top Languages" src="https://github-readme-stats.vercel.app/api/top-langs/?username=masterdevsabith&amp;theme=gotham&amp;hide_border=false&amp;include_all_commits=true&amp;count_private=true&amp;layout=compact" />
+    </div>
+
+    <div class="cards" id="repo-cards">
+      <!-- populated by script.js using GitHub API -->
+    </div>
+  </section>
+
+  <section id="youtube" class="section">
+    <div class="section-head">
+      <h2>YouTube <span class="accent">Content</span></h2>
+      <p>Shorts and videos on tech, growth and more.</p>
+    </div>
+    <div class="youtube">
+      <div class="youtube-grid" id="youtube-grid">
+        <!-- Without an API key, we link and optionally embed a configurable video -->
+        <div class="yt-card">
+          <div class="yt-thumb">
+            <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg" alt="Sample thumbnail" />
+          </div>
+          <div class="yt-meta">
+            <h3>@sabiiiiifx</h3>
+            <p>Check out the latest content on the channel.</p>
+            <div class="yt-actions">
+              <a class="chip" href="https://youtube.com/@sabiiiiifx" target="_blank" rel="noopener">Visit Channel</a>
+            </div>
+          </div>
+        </div>
+        <div class="yt-embed">
+          <iframe id="yt-iframe" width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video player"
+            frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
+          </iframe>
+          <p class="hint">Replace the video ID in assets/script.js with a recent video from @sabiiiiifx to auto-update this embed.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section">
+    <div class="section-head">
+      <h2>Let’s <span class="accent">Collaborate</span></h2>
+      <p>Open to web dev projects and open source contributions. DMs welcome.</p>
+    </div>
+    <div class="contact-grid">
+      <form class="contact-form" action="https://formspree.io/f/mgegrzkw" method="POST">
+        <div class="field">
+          <label for="name">Name</label>
+          <input id="name" name="name" type="text" placeholder="Your name" required />
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" placeholder="you@example.com" required />
+        </div>
+        <div class="field">
+          <label for="msg">Message</label>
+          <textarea id="msg" name="message" rows="5" placeholder="What do you want to build together?" required></textarea>
+        </div>
+        <button class="primary-btn" type="submit">Send</button>
+      </form>
+      <div class="contact-aside">
+        <div class="contact-card">
+          <h3>Prefer socials?</h3>
+          <p>Reach out on:</p>
+          <div class="socials">
+            <a class="social-btn" href="https://instagram.com/sabiiii.fx" target="_blank" rel="noopener">Instagram</a>
+            <a class="social-btn" href="https://github.com/masterdevsabith" target="_blank" rel="noopener">GitHub</a>
+            <a class="social-btn" href="https://youtube.com/@sabiiiiifx" target="_blank" rel="noopener">YouTube</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <p>© <span id="year"></span> Muhammed Sabith • Built with love and open source</p>
+  </footer>
+
+  <script src="assets/script.js"></script>
+</body>
+</html>
