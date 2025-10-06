@@ -5,6 +5,8 @@
   // Dev.to API - fetch latest articles
   const articlesGrid = document.getElementById('articles-grid');
   async function loadArticles() {
+    // If articles grid isn't present, don't attempt to load articles.
+    if (!articlesGrid) return;
     try {
       const res = await fetch('https://dev.to/api/articles?username=andrewbaisden&per_page=9');
       if (!res.ok) throw new Error('Failed to load articles');
@@ -38,12 +40,14 @@
 
       articlesGrid.innerHTML = cards;
     } catch (e) {
-      articlesGrid.innerHTML = `
-        <div class="card">
-          <p class="card-desc">Unable to load Dev.to articles at the moment.</p>
-        </div>
-      `;
-      // Allow errors to be visible in console for debugging
+      // If the grid exists, show a message; otherwise just log.
+      if (articlesGrid) {
+        articlesGrid.innerHTML = `
+          <div class="card">
+            <p class="card-desc">Unable to load Dev.to articles at the moment.</p>
+          </div>
+        `;
+      }
       console.error(e);
     }
   }
