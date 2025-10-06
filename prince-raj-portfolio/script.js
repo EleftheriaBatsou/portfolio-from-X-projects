@@ -128,3 +128,77 @@ function start() {
 }
 window.addEventListener('resize', start);
 start();
+
+/* GitHub latest contributions feed */
+const FEED_EL = document.getElementById('gh-feed');
+async function loadFeed() {
+  if (!FEED_EL) return;
+  try {
+    const res = await fetch('https://api.github.com/users/theprinceraj/events?per_page=25', {
+      headers: { 'Accept': 'application/vnd.github+json' }
+    });
+    const data = await res.json();
+    const items = Array.isArray(data) ? data.slice(0, 8) : [];
+    FEED_EL.innerHTML = items.map(ev => renderItem(ev)).join('');
+  } catch (_) {
+    FEED_EL.innerHTML = '<li><span class="badge">!</span><div>Unable to load activity.</div></li>';
+  }
+}
+function renderItem(ev) {
+  const type = ev.type || 'Event';
+  const repo = ev.repo?.name || '';
+  const url = (ev.payload?.pull_request?.html_url) ||
+              (ev.payload?.issue?.html_url) ||
+              (ev.payload?.comment?.html_url) ||
+              (repo ? `https://github.com/${repo}` : '#');
+  const time = relativeTime(ev.created_at);
+  const icon = iconFor(type);
+  const title = titleFor(ev);
+  return `
+    <li>
+      <span class="badge">${icon}</span>
+      <div>
+        <div>${title}</div>
+        <div class="meta">${repo}</div>
+      </div>
+      <time class="meta" datetime="${ev.created_at}">${time}</time>
+    </li>
+  `;
+}
+function iconFor(type) {
+  switch (type) {
+    case 'PushEvent': return '⬆️';
+    case 'PullRequestEvent': return '🔀';
+    case 'IssuesEvent': return '❗';
+    case 'IssueCommentEvent': return '💬';
+    case 'CreateEvent': return '📦';
+    case 'WatchEvent': return '⭐';
+    case 'ForkEvent': return '🍴';
+    case 'PublicEvent': return '📣';
+    default: return '🔧';
+  }
+}
+function titleFor(ev) {
+  const type = ev.type;
+  const repo = ev.repo?.name || '';
+  if (type === 'PushEvent') return `Pushed to ${repo}`;
+  if (type === 'PullRequestEvent') return `${ev.payload.action} PR #${ev.payload.pull_request?.number ?? ''}`;
+  if (type === 'IssuesEvent') return `${ev.payload.action} issue #${ev.payload.issue?.number ?? ''}`;
+  if (type === 'IssueCommentEvent') return `Commented on issue #${ev.payload.issue?.number ?? ''}`;
+  if (type === 'CreateEvent') return `Created ${ev.payload.ref_type} ${ev.payload.ref ?? ''}`;
+  if (type === 'WatchEvent') return `Starred ${repo}`;
+  if (type === 'ForkEvent') return `Forked ${repo}`;
+  return type || 'Activity';
+}
+function relativeTime(iso) {
+  const diff = Date.now() - new Date(iso).getTime();
+  const mins = Math.round(diff / 60000);
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.round(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  const days = Math.round(hrs / 24);
+  if (days < 30) return `${days}d ago`;
+  const months = Math.round(days / 30);
+  return `${months}mo ago`;
+}
+loadFeed();

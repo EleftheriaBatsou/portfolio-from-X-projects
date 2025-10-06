@@ -28,6 +28,9 @@
     </a>
     <nav class="nav">
       <a href="#projects">Projects</a>
+      <a href="#articles">Articles</a>
+      <a href="#achievements">Achievements</a>
+      <a href="#activity">Activity</a>
       <a href="#about">About</a>
       <a href="#toolbox">Toolbox</a>
       <a href="#testimonials">Testimonials</a>
@@ -142,6 +145,101 @@
             <a class="btn btn-ghost" href="https://prince.is-a.dev/Profile-Cards-API/" target="_blank" rel="noopener">View Live Site</a>
           </div>
         </article>
+      </div>
+    </section>
+
+    <!-- Articles -->
+    <section id="articles" class="section">
+      <div class="section-header">
+        <h2>Articles & Notes</h2>
+        <p>Ideas, learnings, and build logs.</p>
+      </div>
+      <div class="articles-grid">
+        <article class="card reveal">
+          <div class="card-media">
+            <img src="https://prince.is-a.dev/_next/static/media/cover-genius-screenshot.da623ddd.webp" alt="Cover Genius" loading="lazy">
+          </div>
+          <div class="card-body">
+            <div class="card-kicker">Product • 2025</div>
+            <h3>Designing Cover Genius: From concept to AI assistant</h3>
+            <p class="muted">Notes on building a tailored cover-letter assistant, resume parsing, auth, and payments.</p>
+            <a class="btn btn-ghost" href="https://covergenius.is-a.software/" target="_blank" rel="noopener">Read</a>
+          </div>
+        </article>
+        <article class="card reveal">
+          <div class="card-media">
+            <img src="https://prince.is-a.dev/_next/static/media/markshify-landing-page.a632cd8a.png" alt="Markshify" loading="lazy">
+          </div>
+          <div class="card-body">
+            <div class="card-kicker">Engineering • 2024</div>
+            <h3>OCR pipelines for mark sheets</h3>
+            <p class="muted">Extracting 20+ fields reliably, and CSV conversion for exam cells.</p>
+            <a class="btn btn-ghost" href="https://github.com/theprinceraj/Markshify" target="_blank" rel="noopener">Read</a>
+          </div>
+        </article>
+        <article class="card reveal">
+          <div class="card-media">
+            <img src="https://prince.is-a.dev/_next/static/media/profile-cards-generator-page.bb3e760c.png" alt="Profile Cards" loading="lazy">
+          </div>
+          <div class="card-body">
+            <div class="card-kicker">Web • 2023</div>
+            <h3>Debounced forms and validation at scale</h3>
+            <p class="muted">Building dynamic profile cards with high uptime on Vercel.</p>
+            <a class="btn btn-ghost" href="https://prince.is-a.dev/Profile-Cards-API/" target="_blank" rel="noopener">Read</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Achievements -->
+    <section id="achievements" class="section">
+      <div class="section-header">
+        <h2>Achievements</h2>
+        <p>Recognition on GitHub for contributions and impact.</p>
+      </div>
+      <div class="achievements-row">
+        <div class="achievement">
+          <img src="https://github.githubassets.com/assets/pull-shark-default-498c279a747d.png" alt="Pull Shark" loading="lazy">
+          <div class="a-meta">
+            <strong>Pull Shark ×2</strong>
+            <span class="muted">Merged pull requests</span>
+          </div>
+        </div>
+        <div class="achievement">
+          <img src="https://github.githubassets.com/assets/yolo-default-be0bbff04951.png" alt="YOLO" loading="lazy">
+          <div class="a-meta">
+            <strong>YOLO</strong>
+            <span class="muted">Confident contributions</span>
+          </div>
+        </div>
+        <div class="achievement">
+          <img src="https://github.githubassets.com/assets/quickdraw-default--light-8f798b35341a.png" alt="Quickdraw" loading="lazy">
+          <div class="a-meta">
+            <strong>Quickdraw</strong>
+            <span class="muted">Fast responses</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Activity -->
+    <section id="activity" class="section">
+      <div class="section-header">
+        <h2>Latest Activity</h2>
+        <p>Recent work and contributions.</p>
+      </div>
+      <div class="activity-grid">
+        <div class="activity-graph card">
+          <img src="https://github-readme-activity-graph.vercel.app/graph?username=theprinceraj&bg=0b0f1a&color=e6e8ea&line=7c5cff&point=6ce7f9&area=true&hide_border=true" alt="GitHub Activity Graph" loading="lazy">
+        </div>
+        <div class="activity-feed card">
+          <div class="card-body">
+            <div class="card-kicker">GitHub • Live</div>
+            <h3>Recent Contributions</h3>
+            <ul id="gh-feed" class="feed"></ul>
+            <a class="btn btn-ghost" href="https://github.com/theprinceraj" target="_blank" rel="noopener">View GitHub Profile</a>
+          </div>
+        </div>
       </div>
     </section>
 

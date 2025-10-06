@@ -218,6 +218,11 @@ a:hover { opacity: 0.9; }
   grid-template-columns: repeat(4, 1fr);
   gap: 18px;
 }
+.articles-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
 .card {
   display: flex;
   flex-direction: column;
@@ -343,6 +348,74 @@ blockquote { margin: 8px 0 0; color: var(--text); opacity: 0.9; }
   border: 1px solid var(--border);
 }
 
+/* Achievements */
+.achievements-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.achievement {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: rgba(255,255,255,0.02);
+}
+.achievement img {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.03);
+}
+.a-meta strong { display: block; }
+.a-meta span { display: block; font-size: 13px; color: var(--muted); }
+
+/* Activity */
+.activity-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 18px;
+  align-items: start;
+}
+.activity-graph img {
+  width: 100%;
+  display: block;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+.feed {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0;
+}
+.feed li {
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--border);
+}
+.feed li:last-child { border-bottom: none; }
+.feed .badge {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  font-size: 14px;
+}
+.feed .meta {
+  color: var(--muted);
+  font-size: 12px;
+}
+
 /* Toolbox marquee */
 .marquee {
   overflow: hidden;
@@ -452,14 +525,22 @@ blockquote { margin: 8px 0 0; color: var(--text); opacity: 0.9; }
 /* Responsive */
 @media (max-width: 1100px) {
   .projects-grid { grid-template-columns: repeat(2, 1fr); }
+  .articles-grid { grid-template-columns: repeat(2, 1fr); }
   .testimonials-carousel { grid-template-columns: 1fr 1fr; }
+  .achievements-row { grid-template-columns: repeat(3, 1fr); }
+  .activity-grid { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 860px) {
   .hero { grid-template-columns: 1fr; }
   .about-grid { grid-template-columns: 1fr; }
-}
+  .achievements-row { grid-template-columns: 1fr 1fr; }new
+</}
+
 @media (max-width: 560px) {
   .projects-grid { grid-template-columns: 1fr; }
+  .articles-grid { grid-template-columns: 1fr; }
   .nav { display: none; }
   .hero h1 { font-size: 36px; }
+  .achievements-row { grid-template-columns: 1fr; }
+  .activity-grid { grid-template-columns: 1fr; }
 }
