@@ -1,10 +1,6 @@
 /**
  * Portfolio Generator — Professional, tailored designs with unique links.
- * - Randomized theme/layout tuned by tone and motion.
- * - Avatar appears once (header or hero).
- * - Auto-renders from URL params (?user, ?seed, ?place, ?bg, ?tone, ?motion).
- * - Fetches GitHub repos to highlight top projects.
- * - Derives palette from avatar (dominant colors) when possible.
+ * Direct portfolio rendering when URL params present; no generator UI visible.
  */
 
 const form = document.getElementById('config-form');
@@ -40,7 +36,7 @@ useCustomColorInput.addEventListener('change', () => {
   colorPickerWrap.hidden = !useCustomColorInput.checked;
 });
 
-// Seeded PRNG (Mulberry32) for deterministic randomness
+// Seeded PRNG (Mulberry32)
 function mulberry32(seed) {
   return function() {
     let t = seed += 0x6D2B79F5;
@@ -49,13 +45,8 @@ function mulberry32(seed) {
     return ((t ^ t >>> 14) >>> 0) / 4294967296;
   };
 }
-
-function randChoice(rand, arr) {
-  return arr[Math.floor(rand() * arr.length)];
-}
-function randFloat(rand, min = 0, max = 1) {
-  return min + (max - min) * rand();
-}
+function randChoice(rand, arr) { return arr[Math.floor(rand() * arr.length)]; }
+function randFloat(rand, min = 0, max = 1) { return min + (max - min) * rand(); }
 
 // Palettes and theme families
 const palettes = [
@@ -80,9 +71,7 @@ function parseGitHubUsername(url) {
     if (u.hostname !== 'github.com') return null;
     const parts = u.pathname.split('/').filter(Boolean);
     return parts[0] || null;
-  } catch {
-    return null;
-  }
+  } catch { return null; }
 }
 
 async function fetchGitHubUser(username) {
@@ -90,7 +79,6 @@ async function fetchGitHubUser(username) {
   if (!resp.ok) throw new Error(`GitHub API error: ${resp.status}`);
   return await resp.json();
 }
-
 async function fetchGitHubRepos(username) {
   const resp = await fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=updated`);
   if (!resp.ok) throw new Error(`GitHub API error: ${resp.status}`);
@@ -112,7 +100,6 @@ async function derivePaletteFromAvatar(url) {
         ctx.drawImage(img, 0, 0, w, h);
         const data = ctx.getImageData(0, 0, w, h).data;
 
-        // Simple color quantization by sampling grid
         const buckets = {};
         for (let i = 0; i < data.length; i += 16) {
           const r = data[i], g = data[i+1], b = data[i+2];
@@ -125,12 +112,9 @@ async function derivePaletteFromAvatar(url) {
           const toHex = (n) => n.toString(16).padStart(2,'0');
           return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
         });
-        // Ensure at least 3 colors
         while (cols.length < 3) cols.push('#60a5fa');
         resolve(cols);
-      } catch {
-        resolve(null);
-      }
+      } catch { resolve(null); }
     };
     img.onerror = () => resolve(null);
   });
@@ -140,8 +124,6 @@ function clearAvatarSlots() {
   headerAvatarSlot.innerHTML = '';
   heroAvatarSlot.innerHTML = '';
 }
-
-// Only render the avatar in the selected slot
 function renderAvatar(avatarUrl, placement) {
   clearAvatarSlots();
   const img = document.createElement('img');
@@ -150,32 +132,32 @@ function renderAvatar(avatarUrl, placement) {
   img.loading = 'lazy';
   img.width = placement === 'hero' ? 120 : 56;
   img.height = placement === 'hero' ? 120 : 56;
-
   if (placement === 'header') headerAvatarSlot.appendChild(img);
   else heroAvatarSlot.appendChild(img);
 }
 
-function applyTheme(rand, customBgHex, tone, motion, paletteOverride=null) {
-  // Reset classes
-  portfolio.classList.remove(...themeClasses, ...layoutClasses);
+function applyTheme(rand, customBgHex, tone, motion, paletteOverride=null, templateFamily=null) {
+  portfolio.classList.remove(...themeClasses, ...layoutClasses,
+    'template-brittany', 'template-bruno', 'template-cassie', 'template-jhey', 'template-olaolu',
+    'template-studio', 'template-oss', 'template-advocate', 'template-blog');
 
-  // Map tone to theme/layout biases
   const toneMap = {
-    minimal: { themes: ['theme-gradient','theme-glass'], layouts: ['layout-minimal','layout-cardstack'] },
-    studio:  { themes: ['theme-glass','theme-gradient'], layouts: ['layout-split','layout-cardstack'] },
-    bold:    { themes: ['theme-mesh','theme-stripe'], layouts: ['layout-split','layout-sidebar'] },
-    product: { themes: ['theme-gradient','theme-glass'], layouts: ['layout-split','layout-cardstack'] },
-    oss:     { themes: ['theme-mesh','theme-gradient'], layouts: ['layout-sidebar','layout-cardstack'] },
-    advocate:{ themes: ['theme-stripe','theme-mesh'], layouts: ['layout-split','layout-sidebar'] },
-    blog:    { themes: ['theme-gradient','theme-glass'], layouts: ['layout-cardstack','layout-minimal'] },
-    auto:    { themes: themeClasses, layouts: layoutClasses }
+    minimal: { themes: ['theme-gradient','theme-glass'], layouts: ['layout-minimal','layout-cardstack'], template: 'template-brittany' },
+    studio:  { themes: ['theme-glass','theme-gradient'], layouts: ['layout-split','layout-cardstack'], template: 'template-studio' },
+    bold:    { themes: ['theme-mesh','theme-stripe'], layouts: ['layout-split','layout-sidebar'], template: rand() < 0.5 ? 'template-bruno' : 'template-cassie' },
+    product: { themes: ['theme-gradient','theme-glass'], layouts: ['layout-split','layout-cardstack'], template: 'template-jhey' },
+    oss:     { themes: ['theme-mesh','theme-gradient'], layouts: ['layout-sidebar','layout-cardstack'], template: 'template-oss' },
+    advocate:{ themes: ['theme-stripe','theme-mesh'], layouts: ['layout-split','layout-sidebar'], template: 'template-advocate' },
+    blog:    { themes: ['theme-gradient','theme-glass'], layouts: ['layout-cardstack','layout-minimal'], template: 'template-blog' },
+    auto:    { themes: themeClasses, layouts: layoutClasses, template: rand() < .16 ? 'template-brittany' : rand() < .32 ? 'template-bruno' : rand() < .48 ? 'template-cassie' : rand() < .64 ? 'template-jhey' : rand() < .8 ? 'template-olaolu' : 'template-studio' }
   };
+
+  const chosenTemplate = templateFamily || toneMap[tone]?.template || 'template-studio';
   const prefs = toneMap[tone] || toneMap.auto;
   const themeClass = randChoice(rand, prefs.themes);
   const layoutClass = randChoice(rand, prefs.layouts);
-  portfolio.classList.add(themeClass, layoutClass);
+  portfolio.classList.add(themeClass, layoutClass, chosenTemplate);
 
-  // Colors and alpha
   const palette = paletteOverride || randChoice(rand, palettes);
   const [c1, c2, c3] = palette;
   const alphaBase = { subtle: 0.65, moderate: 0.8, energetic: 0.95 }[motion] || 0.8;
@@ -185,18 +167,14 @@ function applyTheme(rand, customBgHex, tone, motion, paletteOverride=null) {
   portfolio.style.setProperty('--c3', c3);
   portfolio.style.setProperty('--alpha', Math.max(0.5, Math.min(alpha, 0.98)).toFixed(2));
 
-  // Optional custom background override (semi-transparent)
   if (customBgHex) {
     portfolio.style.background = customBgHex + Math.floor(alpha * 255).toString(16).padStart(2, '0');
   } else {
-    portfolio.style.background = ''; // let theme class backgrounds apply
+    portfolio.style.background = '';
   }
 
-  // Motion level could adjust animation durations (CSS uses default; we can tweak via style)
   const heroEl = document.querySelector('.hero');
-  // Clear existing blobs
   heroEl.querySelectorAll('.blob').forEach(b => b.remove());
-  // Energetic and bold often get blobs
   const blobChance = motion === 'energetic' ? 0.85 : motion === 'moderate' ? 0.6 : 0.35;
   if (themeClass === 'theme-mesh' || rand() < blobChance) {
     for (let i = 0; i < 3; i++) {
@@ -210,7 +188,6 @@ function applyTheme(rand, customBgHex, tone, motion, paletteOverride=null) {
 }
 
 function renderSocials(user, githubProfileUrl) {
-  // Header socials
   headerSocials.innerHTML = '';
   const ghHeaderLink = document.createElement('a');
   ghHeaderLink.href = githubProfileUrl;
@@ -227,7 +204,6 @@ function renderSocials(user, githubProfileUrl) {
     twHeaderLink.textContent = 'Twitter';
     headerSocials.appendChild(twHeaderLink);
   }
-
   if (user.blog) {
     const blogHeaderLink = document.createElement('a');
     blogHeaderLink.href = user.blog;
@@ -237,7 +213,6 @@ function renderSocials(user, githubProfileUrl) {
     headerSocials.appendChild(blogHeaderLink);
   }
 
-  // Social section (list)
   socialListEl.innerHTML = '';
   const ghItem = document.createElement('li');
   ghItem.innerHTML = `<a href="${githubProfileUrl}" target="_blank" rel="noopener noreferrer">GitHub</a>`;
@@ -248,7 +223,6 @@ function renderSocials(user, githubProfileUrl) {
     twItem.innerHTML = `<a href="https://twitter.com/${user.twitter_username}" target="_blank" rel="noopener noreferrer">Twitter</a>`;
     socialListEl.appendChild(twItem);
   }
-
   if (user.blog) {
     const blogItem = document.createElement('li');
     blogItem.innerHTML = `<a href="${user.blog}" target="_blank" rel="noopener noreferrer">Website</a>`;
@@ -280,9 +254,8 @@ function renderProjects(repos, rand) {
   projectsGridEl.innerHTML = '';
   if (!Array.isArray(repos) || repos.length === 0) return;
 
-  // Sort by stars then by recent push date
   const sorted = repos
-    .filter(r => !r.fork) // prioritize original work
+    .filter(r => !r.fork)
     .sort((a,b) => (b.stargazers_count - a.stargazers_count) || (new Date(b.pushed_at) - new Date(a.pushed_at)));
 
   const count = Math.min(5, Math.max(1, Math.round(randFloat(rand, 3, 5))));
@@ -290,7 +263,7 @@ function renderProjects(repos, rand) {
   featured.forEach(r => projectsGridEl.appendChild(buildProjectCard(r)));
 }
 
-function buildUniqueLink({ username, placement, seed, customBg, tone, motion }) {
+function buildUniqueLink({ username, placement, seed, customBg, tone, motion, template }) {
   const params = new URLSearchParams();
   params.set('user', username);
   params.set('seed', String(seed));
@@ -298,6 +271,7 @@ function buildUniqueLink({ username, placement, seed, customBg, tone, motion }) 
   if (customBg) params.set('bg', customBg);
   if (tone) params.set('tone', tone);
   if (motion) params.set('motion', motion);
+  if (template) params.set('template', template);
   return `${location.origin}${location.pathname}?${params.toString()}`;
 }
 
@@ -309,11 +283,12 @@ function parseParams() {
   const bg = p.get('bg');
   const tone = p.get('tone') || 'auto';
   const motion = p.get('motion') || 'moderate';
-  return { user, seed, place, bg, tone, motion };
+  const template = p.get('template');
+  return { user, seed, place, bg, tone, motion, template };
 }
 
 async function renderFromParams() {
-  const { user, seed, place, bg, tone, motion } = parseParams();
+  const { user, seed, place, bg, tone, motion, template } = parseParams();
   if (!user || !seed) return false;
 
   // Hide config; show portfolio section
@@ -325,7 +300,6 @@ async function renderFromParams() {
   try {
     const u = await fetchGitHubUser(user);
 
-    // Text fields
     const displayName = u.name || u.login || user;
     const bio = u.bio || 'This user has no bio set on GitHub.';
     const tagline = u.company || u.location || '';
@@ -335,20 +309,15 @@ async function renderFromParams() {
     heroTitleNameInline.textContent = displayName;
     aboutTextEl.textContent = bio;
 
-    // Palette from avatar when possible
     const avatarPalette = await derivePaletteFromAvatar(u.avatar_url);
 
-    // Theme and layout
-    applyTheme(rand, bg, tone, motion, avatarPalette);
+    applyTheme(rand, bg, tone, motion, avatarPalette, template);
 
-    // Placement (if not provided, random)
     const placement = (place && placementOptions.includes(place)) ? place : randChoice(rand, placementOptions);
     renderAvatar(u.avatar_url, placement);
 
-    // Socials
     renderSocials(u, `https://github.com/${user}`);
 
-    // Projects
     const repos = await fetchGitHubRepos(user);
     renderProjects(repos, rand);
 
@@ -377,7 +346,6 @@ form.addEventListener('submit', async (e) => {
   const tone = toneSelect.value || 'auto';
   const motion = motionSelect.value || 'moderate';
 
-  // Generate a strong random seed
   const buf = new Uint32Array(1);
   crypto.getRandomValues(buf);
   const seed = buf[0] || Math.floor(Math.random() * 1e9);
@@ -396,9 +364,8 @@ copyBtn.addEventListener('click', () => {
 (async () => {
   const rendered = await renderFromParams();
   if (rendered) {
-    // Portfolio already shown
+    // Portfolio already shown; config hidden.
   } else {
-    // Show config if no params
     configSection.hidden = false;
     portfolioSection.hidden = true;
   }

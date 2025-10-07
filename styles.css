@@ -35,36 +35,17 @@ a:hover { text-decoration: underline; transform: translateY(-1px); }
   padding: 0 16px;
 }
 
-.app-header {
-  background: linear-gradient(180deg, rgba(96,165,250,0.12), rgba(52,211,153,0.12));
-  border-bottom: 1px solid var(--border);
-}
-.app-header .container { padding: 24px 16px; }
-.app-header h1 {
-  margin: 0 0 8px 0;
-  font-size: 28px;
-}
-.subtitle {
-  margin: 0;
-  color: var(--muted);
-  font-size: 14px;
-}
-
-/* Config / Form */
+/* Config / Form (hidden when rendering portfolio via params) */
 .config { margin: 24px 0; }
-.config h2 { font-size: 18px; margin-top: 24px; }
-
 form#config-form {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 16px;
 }
-
 .form-group { margin-bottom: 16px; }
 .form-group label { display: block; font-weight: 600; margin-bottom: 6px; }
 .hint { color: var(--muted); font-size: 12px; }
-
 input[type="url"], input[type="text"], select {
   width: 100%;
   padding: 10px 12px;
@@ -73,7 +54,6 @@ input[type="url"], input[type="text"], select {
   background: var(--bg-soft);
   color: var(--text);
 }
-
 .radio-group { display: flex; gap: 16px; }
 .switch { display: flex; align-items: center; gap: 8px; }
 .color-picker-wrap { margin-top: 8px; }
@@ -84,7 +64,6 @@ input[type="color"] {
   border: none;
   background: transparent;
 }
-
 .actions { margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap; }
 button#generateBtn, #copyBtn {
   background: var(--primary);
@@ -96,13 +75,8 @@ button#generateBtn, #copyBtn {
   cursor: pointer;
 }
 button#generateBtn:hover, #copyBtn:hover { filter: brightness(1.05); }
-
-.result {
-  margin-top: 12px;
-}
-.link-row {
-  display: flex; gap: 8px;
-}
+.result { margin-top: 12px; }
+.link-row { display: flex; gap: 8px; }
 #resultLink {
   flex: 1;
   padding: 10px 12px;
@@ -121,25 +95,6 @@ button#generateBtn:hover, #copyBtn:hover { filter: brightness(1.05); }
   position: relative;
 }
 
-/* Layout variants */
-.layout-sidebar .portfolio-header {
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 16px;
-  background: rgba(255,255,255,0.03);
-}
-.layout-split .portfolio-header {
-  background: transparent;
-  border-bottom: none;
-}
-.layout-cardstack .about, .layout-cardstack .links, .layout-cardstack .projects {
-  background: rgba(255,255,255,0.03);
-  border-radius: 16px;
-  margin: 12px;
-  border: 1px solid var(--border);
-}
-.layout-minimal .portfolio-header { display: none; }
-
 /* Base header */
 .portfolio-header {
   display: flex;
@@ -150,11 +105,9 @@ button#generateBtn:hover, #copyBtn:hover { filter: brightness(1.05); }
   background: rgba(255,255,255,0.02);
   border-bottom: 1px solid var(--border);
 }
-
 .brand { display: flex; align-items: center; gap: 12px; }
 .titles h1.name { margin: 0; font-size: 22px; letter-spacing: .3px; }
 .titles p.tagline { margin: 2px 0 0 0; color: var(--muted); font-size: 14px; }
-
 .header-socials { display: flex; gap: 10px; }
 .header-socials a {
   padding: 6px 10px;
@@ -181,7 +134,7 @@ section.hero {
 .hero-title { margin: 0; font-size: 28px; letter-spacing: .2px; }
 .hero-subtitle { margin: 6px 0 0 0; color: var(--muted); }
 
-/* Animated blobs behind hero (crazy animation option) */
+/* Animated blobs behind hero */
 .blob {
   position: absolute;
   width: 420px; height: 420px;
@@ -280,14 +233,12 @@ section.about h3, section.links h3 { margin: 0 0 10px 0; font-size: 16px; }
 .avatar-slot:hover { transform: scale(1.03); }
 .hero .avatar-slot { width: 120px; height: 120px; border-radius: 16px; }
 
-/* THEME VARIANTS */
-/* Glassmorphism card look */
+/* THEME VARIANTS (base families) */
 .theme-glass .portfolio.shell {
   background: linear-gradient(180deg, rgba(17,24,39,.6), rgba(17,24,39,.8));
   backdrop-filter: blur(14px);
   border: 1px solid rgba(255,255,255,0.12);
 }
-/* Gradient background */
 .theme-gradient .portfolio.shell {
   background: linear-gradient(
     135deg,
@@ -296,7 +247,6 @@ section.about h3, section.links h3 { margin: 0 0 10px 0; font-size: 16px; }
   ), linear-gradient(120deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)),
   linear-gradient(180deg, color-mix(in oklab, var(--c1) var(--alpha*100%), transparent), color-mix(in oklab, var(--c2) calc(var(--alpha)*100%), transparent));
 }
-/* Mesh gradient with animated hue rotation */
 .theme-mesh .portfolio.shell {
   background:
     radial-gradient(1200px 600px at 10% 10%, color-mix(in oklab, var(--c1) 40%, transparent), transparent 35%),
@@ -305,25 +255,49 @@ section.about h3, section.links h3 { margin: 0 0 10px 0; font-size: 16px; }
     #0b1020;
   animation: hue 40s linear infinite;
 }
-@keyframes hue {
-  0% { filter: hue-rotate(0deg); }
-  100% { filter: hue-rotate(360deg); }
-}
+@keyframes hue { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(360deg); } }
 
-/* Animated gradient stripe */
 .theme-stripe .hero {
   background: linear-gradient(90deg, var(--c1), var(--c2), var(--c3));
   background-size: 300% 300%;
   animation: gradientShift 14s ease infinite;
 }
-@keyframes gradientShift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
+@keyframes gradientShift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
 
-/* Layout variants specifics */
-.layout-sidebar .hero-inner { grid-template-columns: 1fr; }
-.layout-split .hero-inner { grid-template-columns: 1fr 1fr; }
+/* Specific template families inspired by references */
+/* Brittany Chiang: editorial, restrained palette, strong type rhythm */
+.template-brittany .portfolio-header { background: transparent; border-bottom: none; }
+.template-brittany .hero { background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0)); }
+.template-brittany .projects-grid { grid-template-columns: 1fr; }
+.template-brittany .project-card { background: rgba(255,255,255,0.02); border-radius: 10px; }
+/* Bruno Simon: playful motion, bold gradients */
+.template-bruno .hero { background: radial-gradient(circle at 20% 30%, var(--c1), transparent 60%), radial-gradient(circle at 80% 70%, var(--c2), transparent 60%); }
+.template-bruno .project-card:hover { transform: rotate(-0.5deg) translateY(-4px); }
+/* Cassie Evans: vivid motion, illustrative accents */
+.template-cassie .hero { background: conic-gradient(from 180deg at 50% 50%, var(--c1), var(--c2), var(--c3)); }
+.template-cassie .header-socials a { box-shadow: 0 0 0 2px rgba(255,255,255,0.08) inset; }
+/* Jhey Dev: crisp gradient systems, interactive details */
+.template-jhey .portfolio-header { background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0)); }
+.template-jhey .project-card { border: none; box-shadow: 0 0 0 1px var(--border) inset; }
+/* Olaolu: modern gradient hero and clean cards */
+.template-olaolu .hero { background: linear-gradient(135deg, var(--c1), var(--c2)); }
+.template-olaolu .project-card { border-radius: 16px; }
+/* Studio/Agency: grid-led case study feel */
+.template-studio .projects-grid { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.template-studio .project-card { padding: 16px; }
+/* Open-source maintainer: emphasis on repos list */
+.template-oss .projects h3 { font-weight: 700; letter-spacing: .3px; }
+.template-oss .project-meta .badge { background: rgba(255,255,255,0.06); }
+/* Developer advocate: highlight socials and writing */
+.template-advocate .header-socials a { background: rgba(255,255,255,0.06); }
+/* Blog hybrid: relaxed editorial */
+.template-blog .projects-grid { grid-template-columns: 1fr; }
+
+/* Layout variants */
+.layout-sidebar .portfolio-header { flex-direction: column; align-items: flex-start; gap: 16px; background: rgba(255,255,255,0.03); }
+.layout-split .portfolio-header { background: transparent; border-bottom: none; }
+.layout-cardstack .about, .layout-cardstack .links, .layout-cardstack .projects { background: rgba(255,255,255,0.03); border-radius: 16px; margin: 12px; border: 1px solid var(--border); }
+.layout-minimal .portfolio-header { display: none; }
 
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
