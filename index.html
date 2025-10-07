@@ -3,20 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Portfolio Generator</title>
+  <title>Portfolio</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="app-header">
-    <div class="container">
-      <h1>Portfolio Generator</h1>
-      <p class="subtitle">Professional, modern portfolios tailored from GitHub — each link is unique.</p>
-    </div>
-  </header>
-
   <main class="container">
     <section class="config" id="config-section">
-      <h2>Create a unique portfolio link</h2>
       <form id="config-form">
         <div class="form-group">
           <label for="githubUrl">GitHub Profile URL</label>
@@ -80,7 +72,6 @@
             <input type="text" id="resultLink" readonly />
             <button type="button" id="copyBtn">Copy</button>
           </div>
-          <small class="hint">Open the link to view the deployed portfolio. Each generation creates a different theme and layout.</small>
         </div>
       </form>
     </section>
@@ -110,9 +101,7 @@
 
         <section class="projects">
           <h3>Featured Work</h3>
-          <div id="projects-grid" class="projects-grid">
-            <!-- Filled by script -->
-          </div>
+          <div id="projects-grid" class="projects-grid"></div>
         </section>
 
         <section class="about">
