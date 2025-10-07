@@ -10,13 +10,13 @@
   <header class="app-header">
     <div class="container">
       <h1>Portfolio Generator</h1>
-      <p class="subtitle">Create a responsive, mobile‑friendly portfolio from a GitHub profile.</p>
+      <p class="subtitle">Generate wildly different, responsive portfolios from a GitHub profile — each link is unique.</p>
     </div>
   </header>
 
   <main class="container">
-    <section class="config">
-      <h2>Configuration</h2>
+    <section class="config" id="config-section">
+      <h2>Create a unique portfolio link</h2>
       <form id="config-form">
         <div class="form-group">
           <label for="githubUrl">GitHub Profile URL</label>
@@ -27,7 +27,8 @@
         <div class="form-group">
           <label>Profile Picture Placement</label>
           <div class="radio-group">
-            <label><input type="radio" name="avatarPlacement" value="header" checked /> Header</label>
+            <label><input type="radio" name="avatarPlacement" value="random" checked /> Random</label>
+            <label><input type="radio" name="avatarPlacement" value="header" /> Header</label>
             <label><input type="radio" name="avatarPlacement" value="hero" /> Hero</label>
           </div>
           <small class="hint">Your GitHub profile picture will appear only in the selected section.</small>
@@ -46,13 +47,21 @@
         </div>
 
         <div class="actions">
-          <button type="submit" id="generateBtn">Generate Portfolio</button>
+          <button type="submit" id="generateBtn">Generate Unique Link</button>
+        </div>
+
+        <div id="result" class="result" hidden>
+          <p>Your unique portfolio link:</p>
+          <div class="link-row">
+            <input type="text" id="resultLink" readonly />
+            <button type="button" id="copyBtn">Copy</button>
+          </div>
+          <small class="hint">Open the link to view the deployed portfolio. Each generation creates a different theme and layout.</small>
         </div>
       </form>
     </section>
 
-    <section class="preview">
-      <h2>Live Preview</h2>
+    <section id="portfolio-section" class="preview" hidden>
       <div id="portfolio" class="portfolio shell">
         <header class="portfolio-header">
           <div class="brand">
@@ -79,7 +88,7 @@
 
         <section class="about">
           <h3>About</h3>
-          <p id="about-text">Your GitHub bio will appear here if available. You can customize this text.</p>
+          <p id="about-text">Your GitHub bio will appear here if available.</p>
         </section>
 
         <section class="links">
