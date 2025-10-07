@@ -1,9 +1,10 @@
 /**
- * Portfolio Generator — Unique link per portfolio (no downloads).
- * - Randomized theme, layout, animations with deterministic seed.
+ * Portfolio Generator — Professional, tailored designs with unique links.
+ * - Randomized theme/layout tuned by tone and motion.
  * - Avatar appears once (header or hero).
- * - Renders portfolio automatically if URL params present (?user=...).
- * - Generates a unique URL to share/deploy.
+ * - Auto-renders from URL params (?user, ?seed, ?place, ?bg, ?tone, ?motion).
+ * - Fetches GitHub repos to highlight top projects.
+ * - Derives palette from avatar (dominant colors) when possible.
  */
 
 const form = document.getElementById('config-form');
@@ -11,6 +12,8 @@ const configSection = document.getElementById('config-section');
 const portfolioSection = document.getElementById('portfolio-section');
 
 const githubUrlInput = document.getElementById('githubUrl');
+const toneSelect = document.getElementById('tone');
+const motionSelect = document.getElementById('motion');
 const useCustomColorInput = document.getElementById('useCustomColor');
 const colorPickerWrap = document.getElementById('colorPickerWrap');
 const bgColorInput = document.getElementById('bgColor');
@@ -31,6 +34,7 @@ const nameEl = document.querySelector('.titles .name');
 const taglineEl = document.querySelector('.titles .tagline');
 const aboutTextEl = document.getElementById('about-text');
 const socialListEl = document.getElementById('social-list');
+const projectsGridEl = document.getElementById('projects-grid');
 
 useCustomColorInput.addEventListener('change', () => {
   colorPickerWrap.hidden = !useCustomColorInput.checked;
@@ -53,7 +57,7 @@ function randFloat(rand, min = 0, max = 1) {
   return min + (max - min) * rand();
 }
 
-// Palettes and variants
+// Palettes and theme families
 const palettes = [
   ['#60a5fa','#34d399','#f472b6'],
   ['#a78bfa','#22d3ee','#f97316'],
@@ -67,12 +71,7 @@ const palettes = [
 
 const themeClasses = ['theme-glass','theme-gradient','theme-mesh','theme-stripe'];
 const layoutClasses = ['layout-sidebar','layout-split','layout-cardstack','layout-minimal'];
-
 const placementOptions = ['header','hero'];
-
-const crazyAnimations = {
-  blobs: true, // animated blobs in hero
-};
 
 // Extract username from a GitHub profile URL
 function parseGitHubUsername(url) {
@@ -90,6 +89,51 @@ async function fetchGitHubUser(username) {
   const resp = await fetch(`https://api.github.com/users/${username}`);
   if (!resp.ok) throw new Error(`GitHub API error: ${resp.status}`);
   return await resp.json();
+}
+
+async function fetchGitHubRepos(username) {
+  const resp = await fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=updated`);
+  if (!resp.ok) throw new Error(`GitHub API error: ${resp.status}`);
+  return await resp.json();
+}
+
+// Dominant color extraction from avatar
+async function derivePaletteFromAvatar(url) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.src = url;
+    img.onload = () => {
+      try {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const w = 64, h = 64;
+        canvas.width = w; canvas.height = h;
+        ctx.drawImage(img, 0, 0, w, h);
+        const data = ctx.getImageData(0, 0, w, h).data;
+
+        // Simple color quantization by sampling grid
+        const buckets = {};
+        for (let i = 0; i < data.length; i += 16) {
+          const r = data[i], g = data[i+1], b = data[i+2];
+          const key = `${Math.round(r/32)*32},${Math.round(g/32)*32},${Math.round(b/32)*32}`;
+          buckets[key] = (buckets[key] || 0) + 1;
+        }
+        const sorted = Object.entries(buckets).sort((a,b) => b[1]-a[1]).slice(0,3);
+        const cols = sorted.map(([k]) => {
+          const [r,g,b] = k.split(',').map(Number);
+          const toHex = (n) => n.toString(16).padStart(2,'0');
+          return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+        });
+        // Ensure at least 3 colors
+        while (cols.length < 3) cols.push('#60a5fa');
+        resolve(cols);
+      } catch {
+        resolve(null);
+      }
+    };
+    img.onerror = () => resolve(null);
+  });
 }
 
 function clearAvatarSlots() {
@@ -111,22 +155,35 @@ function renderAvatar(avatarUrl, placement) {
   else heroAvatarSlot.appendChild(img);
 }
 
-function applyTheme(rand, customBgHex) {
+function applyTheme(rand, customBgHex, tone, motion, paletteOverride=null) {
   // Reset classes
   portfolio.classList.remove(...themeClasses, ...layoutClasses);
 
-  const themeClass = randChoice(rand, themeClasses);
-  const layoutClass = randChoice(rand, layoutClasses);
+  // Map tone to theme/layout biases
+  const toneMap = {
+    minimal: { themes: ['theme-gradient','theme-glass'], layouts: ['layout-minimal','layout-cardstack'] },
+    studio:  { themes: ['theme-glass','theme-gradient'], layouts: ['layout-split','layout-cardstack'] },
+    bold:    { themes: ['theme-mesh','theme-stripe'], layouts: ['layout-split','layout-sidebar'] },
+    product: { themes: ['theme-gradient','theme-glass'], layouts: ['layout-split','layout-cardstack'] },
+    oss:     { themes: ['theme-mesh','theme-gradient'], layouts: ['layout-sidebar','layout-cardstack'] },
+    advocate:{ themes: ['theme-stripe','theme-mesh'], layouts: ['layout-split','layout-sidebar'] },
+    blog:    { themes: ['theme-gradient','theme-glass'], layouts: ['layout-cardstack','layout-minimal'] },
+    auto:    { themes: themeClasses, layouts: layoutClasses }
+  };
+  const prefs = toneMap[tone] || toneMap.auto;
+  const themeClass = randChoice(rand, prefs.themes);
+  const layoutClass = randChoice(rand, prefs.layouts);
   portfolio.classList.add(themeClass, layoutClass);
 
   // Colors and alpha
-  const palette = randChoice(rand, palettes);
+  const palette = paletteOverride || randChoice(rand, palettes);
   const [c1, c2, c3] = palette;
-  const alpha = randFloat(rand, 0.5, 0.95);
+  const alphaBase = { subtle: 0.65, moderate: 0.8, energetic: 0.95 }[motion] || 0.8;
+  const alpha = randFloat(rand, alphaBase-0.05, alphaBase+0.05);
   portfolio.style.setProperty('--c1', c1);
   portfolio.style.setProperty('--c2', c2);
   portfolio.style.setProperty('--c3', c3);
-  portfolio.style.setProperty('--alpha', alpha.toFixed(2));
+  portfolio.style.setProperty('--alpha', Math.max(0.5, Math.min(alpha, 0.98)).toFixed(2));
 
   // Optional custom background override (semi-transparent)
   if (customBgHex) {
@@ -135,11 +192,13 @@ function applyTheme(rand, customBgHex) {
     portfolio.style.background = ''; // let theme class backgrounds apply
   }
 
-  // Crazy animations: optionally add hero blobs
+  // Motion level could adjust animation durations (CSS uses default; we can tweak via style)
   const heroEl = document.querySelector('.hero');
   // Clear existing blobs
   heroEl.querySelectorAll('.blob').forEach(b => b.remove());
-  if (themeClass === 'theme-mesh' || rand() > 0.5) {
+  // Energetic and bold often get blobs
+  const blobChance = motion === 'energetic' ? 0.85 : motion === 'moderate' ? 0.6 : 0.35;
+  if (themeClass === 'theme-mesh' || rand() < blobChance) {
     for (let i = 0; i < 3; i++) {
       const blob = document.createElement('div');
       blob.className = 'blob';
@@ -197,12 +256,48 @@ function renderSocials(user, githubProfileUrl) {
   }
 }
 
-function buildUniqueLink({ username, placement, seed, customBg }) {
+function buildProjectCard(repo) {
+  const el = document.createElement('a');
+  el.className = 'project-card';
+  el.href = repo.html_url;
+  el.target = '_blank';
+  el.rel = 'noopener noreferrer';
+
+  const desc = repo.description || 'No description provided.';
+  const lang = repo.language ? `<span class="badge">${repo.language}</span>` : '';
+  const stars = `<span class="badge">⭐ ${repo.stargazers_count}</span>`;
+  const forks = `<span class="badge">⑂ ${repo.forks_count}</span>`;
+
+  el.innerHTML = `
+    <h4 class="project-title">${repo.name}</h4>
+    <p class="project-desc">${desc}</p>
+    <div class="project-meta">${lang}${stars}${forks}</div>
+  `;
+  return el;
+}
+
+function renderProjects(repos, rand) {
+  projectsGridEl.innerHTML = '';
+  if (!Array.isArray(repos) || repos.length === 0) return;
+
+  // Sort by stars then by recent push date
+  const sorted = repos
+    .filter(r => !r.fork) // prioritize original work
+    .sort((a,b) => (b.stargazers_count - a.stargazers_count) || (new Date(b.pushed_at) - new Date(a.pushed_at)));
+
+  const count = Math.min(5, Math.max(1, Math.round(randFloat(rand, 3, 5))));
+  const featured = sorted.slice(0, count);
+  featured.forEach(r => projectsGridEl.appendChild(buildProjectCard(r)));
+}
+
+function buildUniqueLink({ username, placement, seed, customBg, tone, motion }) {
   const params = new URLSearchParams();
   params.set('user', username);
   params.set('seed', String(seed));
   params.set('place', placement);
   if (customBg) params.set('bg', customBg);
+  if (tone) params.set('tone', tone);
+  if (motion) params.set('motion', motion);
   return `${location.origin}${location.pathname}?${params.toString()}`;
 }
 
@@ -212,11 +307,13 @@ function parseParams() {
   const seed = Number(p.get('seed') || 0);
   const place = p.get('place');
   const bg = p.get('bg');
-  return { user, seed, place, bg };
+  const tone = p.get('tone') || 'auto';
+  const motion = p.get('motion') || 'moderate';
+  return { user, seed, place, bg, tone, motion };
 }
 
 async function renderFromParams() {
-  const { user, seed, place, bg } = parseParams();
+  const { user, seed, place, bg, tone, motion } = parseParams();
   if (!user || !seed) return false;
 
   // Hide config; show portfolio section
@@ -238,8 +335,11 @@ async function renderFromParams() {
     heroTitleNameInline.textContent = displayName;
     aboutTextEl.textContent = bio;
 
+    // Palette from avatar when possible
+    const avatarPalette = await derivePaletteFromAvatar(u.avatar_url);
+
     // Theme and layout
-    applyTheme(rand, bg);
+    applyTheme(rand, bg, tone, motion, avatarPalette);
 
     // Placement (if not provided, random)
     const placement = (place && placementOptions.includes(place)) ? place : randChoice(rand, placementOptions);
@@ -247,6 +347,10 @@ async function renderFromParams() {
 
     // Socials
     renderSocials(u, `https://github.com/${user}`);
+
+    // Projects
+    const repos = await fetchGitHubRepos(user);
+    renderProjects(repos, rand);
 
     return true;
   } catch (err) {
@@ -267,16 +371,18 @@ form.addEventListener('submit', async (e) => {
   }
 
   const placementSelected = document.querySelector('input[name="avatarPlacement"]:checked').value;
-  const placement = placementSelected === 'random' ? null : placementSelected;
+  const placement = placementSelected === 'random' ? 'random' : placementSelected;
   const useColor = useCustomColorInput.checked;
   const customBg = useColor ? bgColorInput.value : null;
+  const tone = toneSelect.value || 'auto';
+  const motion = motionSelect.value || 'moderate';
 
   // Generate a strong random seed
   const buf = new Uint32Array(1);
   crypto.getRandomValues(buf);
   const seed = buf[0] || Math.floor(Math.random() * 1e9);
 
-  const link = buildUniqueLink({ username, placement: placement || 'random', seed, customBg });
+  const link = buildUniqueLink({ username, placement, seed, customBg, tone, motion });
   resultLinkInput.value = link;
   resultWrap.hidden = false;
 });

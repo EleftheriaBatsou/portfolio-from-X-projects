@@ -10,7 +10,7 @@
   <header class="app-header">
     <div class="container">
       <h1>Portfolio Generator</h1>
-      <p class="subtitle">Generate wildly different, responsive portfolios from a GitHub profile — each link is unique.</p>
+      <p class="subtitle">Professional, modern portfolios tailored from GitHub — each link is unique.</p>
     </div>
   </header>
 
@@ -32,6 +32,30 @@
             <label><input type="radio" name="avatarPlacement" value="hero" /> Hero</label>
           </div>
           <small class="hint">Your GitHub profile picture will appear only in the selected section.</small>
+        </div>
+
+        <div class="form-group">
+          <label for="tone">Style / Tone</label>
+          <select id="tone" name="tone">
+            <option value="auto" selected>Auto (derive from profile)</option>
+            <option value="minimal">Minimal editorial</option>
+            <option value="studio">Studio / agency</option>
+            <option value="bold">Bold creative</option>
+            <option value="product">Technical product</option>
+            <option value="oss">Open‑source maintainer</option>
+            <option value="advocate">Developer advocate</option>
+            <option value="blog">Personal blog hybrid</option>
+          </select>
+          <small class="hint">Pick a tone or let the generator choose based on their GitHub profile.</small>
+        </div>
+
+        <div class="form-group">
+          <label for="motion">Motion level</label>
+          <select id="motion" name="motion">
+            <option value="subtle">Subtle</option>
+            <option value="moderate" selected>Moderate</option>
+            <option value="energetic">Energetic</option>
+          </select>
         </div>
 
         <div class="form-group">
@@ -71,9 +95,7 @@
               <p class="tagline">Your bio or tagline will appear here.</p>
             </div>
           </div>
-          <nav class="socials header-socials">
-            <!-- Filled by script -->
-          </nav>
+          <nav class="socials header-socials"></nav>
         </header>
 
         <section class="hero">
@@ -86,6 +108,13 @@
           </div>
         </section>
 
+        <section class="projects">
+          <h3>Featured Work</h3>
+          <div id="projects-grid" class="projects-grid">
+            <!-- Filled by script -->
+          </div>
+        </section>
+
         <section class="about">
           <h3>About</h3>
           <p id="about-text">Your GitHub bio will appear here if available.</p>
@@ -93,9 +122,7 @@
 
         <section class="links">
           <h3>Social</h3>
-          <ul id="social-list" class="social-list">
-            <!-- Filled by script -->
-          </ul>
+          <ul id="social-list" class="social-list"></ul>
         </section>
 
         <footer class="footer">
