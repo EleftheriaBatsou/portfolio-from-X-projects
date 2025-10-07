@@ -233,19 +233,16 @@ section.about h3, section.links h3 { margin: 0 0 10px 0; font-size: 16px; }
 .avatar-slot:hover { transform: scale(1.03); }
 .hero .avatar-slot { width: 120px; height: 120px; border-radius: 16px; }
 
-/* THEME VARIANTS (base families) */
+/* Base THEME VARIANTS */
 .theme-glass .portfolio.shell {
   background: linear-gradient(180deg, rgba(17,24,39,.6), rgba(17,24,39,.8));
   backdrop-filter: blur(14px);
   border: 1px solid rgba(255,255,255,0.12);
 }
 .theme-gradient .portfolio.shell {
-  background: linear-gradient(
-    135deg,
-    rgba(0,0,0,.6),
-    rgba(255,255,255,.04)
-  ), linear-gradient(120deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)),
-  linear-gradient(180deg, color-mix(in oklab, var(--c1) var(--alpha*100%), transparent), color-mix(in oklab, var(--c2) calc(var(--alpha)*100%), transparent));
+  background: linear-gradient(135deg, rgba(0,0,0,.6), rgba(255,255,255,.04)),
+    linear-gradient(120deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)),
+    linear-gradient(180deg, color-mix(in oklab, var(--c1) var(--alpha*100%), transparent), color-mix(in oklab, var(--c2) calc(var(--alpha)*100%), transparent));
 }
 .theme-mesh .portfolio.shell {
   background:
@@ -264,33 +261,44 @@ section.about h3, section.links h3 { margin: 0 0 10px 0; font-size: 16px; }
 }
 @keyframes gradientShift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
 
-/* Specific template families inspired by references */
-/* Brittany Chiang: editorial, restrained palette, strong type rhythm */
+/* Prototype-inspired template families */
 .template-brittany .portfolio-header { background: transparent; border-bottom: none; }
 .template-brittany .hero { background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0)); }
 .template-brittany .projects-grid { grid-template-columns: 1fr; }
 .template-brittany .project-card { background: rgba(255,255,255,0.02); border-radius: 10px; }
-/* Bruno Simon: playful motion, bold gradients */
+
 .template-bruno .hero { background: radial-gradient(circle at 20% 30%, var(--c1), transparent 60%), radial-gradient(circle at 80% 70%, var(--c2), transparent 60%); }
 .template-bruno .project-card:hover { transform: rotate(-0.5deg) translateY(-4px); }
-/* Cassie Evans: vivid motion, illustrative accents */
+
 .template-cassie .hero { background: conic-gradient(from 180deg at 50% 50%, var(--c1), var(--c2), var(--c3)); }
 .template-cassie .header-socials a { box-shadow: 0 0 0 2px rgba(255,255,255,0.08) inset; }
-/* Jhey Dev: crisp gradient systems, interactive details */
+
+.template-annie .hero { background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)); }
+.template-itssharl .hero { background: linear-gradient(135deg, var(--c1), var(--c2)); }
+.template-jesse .hero { background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0)); }
 .template-jhey .portfolio-header { background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0)); }
 .template-jhey .project-card { border: none; box-shadow: 0 0 0 1px var(--border) inset; }
-/* Olaolu: modern gradient hero and clean cards */
+.template-adamhartwig .hero { background: radial-gradient(circle at 10% 50%, var(--c1), transparent 60%); }
+.template-kaleb .hero { background: linear-gradient(135deg, var(--c2), var(--c3)); }
+.template-lars .hero { background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0)); }
+.template-lynn .hero { background: linear-gradient(90deg, var(--c1), var(--c2)); }
+.template-nealfun .hero { background: radial-gradient(circle at 50% 50%, var(--c1), var(--c2)); }
+.template-circle .hero { background: conic-gradient(from 0deg at 50% 50%, var(--c1), var(--c2), var(--c3)); }
+.template-brice .hero { background: linear-gradient(135deg, var(--c1), var(--c2)); }
 .template-olaolu .hero { background: linear-gradient(135deg, var(--c1), var(--c2)); }
-.template-olaolu .project-card { border-radius: 16px; }
-/* Studio/Agency: grid-led case study feel */
+.template-adham .hero { background: linear-gradient(135deg, var(--c1), var(--c3)); }
+.template-tamal .hero { background: linear-gradient(135deg, var(--c2), var(--c3)); }
+.template-constance .hero { background: linear-gradient(135deg, var(--c3), var(--c1)); }
+.template-mason .hero { background: linear-gradient(135deg, var(--c1), var(--c3)); }
+.template-robbowen .hero { background: linear-gradient(135deg, var(--c2), var(--c1)); }
+.template-ewan .hero { background: linear-gradient(135deg, var(--c1), var(--c2)); }
+
+/* General families when needed */
 .template-studio .projects-grid { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
 .template-studio .project-card { padding: 16px; }
-/* Open-source maintainer: emphasis on repos list */
 .template-oss .projects h3 { font-weight: 700; letter-spacing: .3px; }
 .template-oss .project-meta .badge { background: rgba(255,255,255,0.06); }
-/* Developer advocate: highlight socials and writing */
 .template-advocate .header-socials a { background: rgba(255,255,255,0.06); }
-/* Blog hybrid: relaxed editorial */
 .template-blog .projects-grid { grid-template-columns: 1fr; }
 
 /* Layout variants */

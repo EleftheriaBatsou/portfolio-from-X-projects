@@ -1,5 +1,5 @@
 /**
- * Portfolio Generator — Professional, tailored designs with unique links.
+ * Portfolio Generator — Prototype-style cloning with unique links.
  * Direct portfolio rendering when URL params present; no generator UI visible.
  */
 
@@ -8,7 +8,6 @@ const configSection = document.getElementById('config-section');
 const portfolioSection = document.getElementById('portfolio-section');
 
 const githubUrlInput = document.getElementById('githubUrl');
-const toneSelect = document.getElementById('tone');
 const motionSelect = document.getElementById('motion');
 const useCustomColorInput = document.getElementById('useCustomColor');
 const colorPickerWrap = document.getElementById('colorPickerWrap');
@@ -136,27 +135,44 @@ function renderAvatar(avatarUrl, placement) {
   else heroAvatarSlot.appendChild(img);
 }
 
-function applyTheme(rand, customBgHex, tone, motion, paletteOverride=null, templateFamily=null) {
+function applyTheme(rand, customBgHex, styleKey, motion, paletteOverride=null) {
   portfolio.classList.remove(...themeClasses, ...layoutClasses,
     'template-brittany', 'template-bruno', 'template-cassie', 'template-jhey', 'template-olaolu',
-    'template-studio', 'template-oss', 'template-advocate', 'template-blog');
+    'template-studio', 'template-oss', 'template-advocate', 'template-blog',
+    'template-annie', 'template-itssharl', 'template-jesse', 'template-adamhartwig', 'template-kaleb',
+    'template-lars', 'template-lynn', 'template-nealfun', 'template-circle', 'template-brice',
+    'template-adham', 'template-tamal', 'template-constance', 'template-mason', 'template-robbowen', 'template-ewan'
+  );
 
-  const toneMap = {
-    minimal: { themes: ['theme-gradient','theme-glass'], layouts: ['layout-minimal','layout-cardstack'], template: 'template-brittany' },
-    studio:  { themes: ['theme-glass','theme-gradient'], layouts: ['layout-split','layout-cardstack'], template: 'template-studio' },
-    bold:    { themes: ['theme-mesh','theme-stripe'], layouts: ['layout-split','layout-sidebar'], template: rand() < 0.5 ? 'template-bruno' : 'template-cassie' },
-    product: { themes: ['theme-gradient','theme-glass'], layouts: ['layout-split','layout-cardstack'], template: 'template-jhey' },
-    oss:     { themes: ['theme-mesh','theme-gradient'], layouts: ['layout-sidebar','layout-cardstack'], template: 'template-oss' },
-    advocate:{ themes: ['theme-stripe','theme-mesh'], layouts: ['layout-split','layout-sidebar'], template: 'template-advocate' },
-    blog:    { themes: ['theme-gradient','theme-glass'], layouts: ['layout-cardstack','layout-minimal'], template: 'template-blog' },
-    auto:    { themes: themeClasses, layouts: layoutClasses, template: rand() < .16 ? 'template-brittany' : rand() < .32 ? 'template-bruno' : rand() < .48 ? 'template-cassie' : rand() < .64 ? 'template-jhey' : rand() < .8 ? 'template-olaolu' : 'template-studio' }
+  const prototypeMap = {
+    brittanychiang: { template: 'template-brittany', themes: ['theme-gradient','theme-glass'], layouts: ['layout-minimal','layout-cardstack'] },
+    brunosimon:     { template: 'template-bruno',    themes: ['theme-mesh','theme-stripe'],   layouts: ['layout-split','layout-sidebar'] },
+    cassie:         { template: 'template-cassie',   themes: ['theme-stripe','theme-mesh'],   layouts: ['layout-split','layout-cardstack'] },
+    anniebombanie:  { template: 'template-annie',    themes: ['theme-gradient'],               layouts: ['layout-cardstack'] },
+    itssharl:       { template: 'template-itssharl', themes: ['theme-gradient'],               layouts: ['layout-split'] },
+    jessezhou:      { template: 'template-jesse',    themes: ['theme-gradient'],               layouts: ['layout-cardstack'] },
+    jhey:           { template: 'template-jhey',     themes: ['theme-gradient','theme-stripe'],layouts: ['layout-split','layout-cardstack'] },
+    adamhartwig:    { template: 'template-adamhartwig', themes: ['theme-mesh'],               layouts: ['layout-split'] },
+    kalebmckelvey:  { template: 'template-kaleb',    themes: ['theme-gradient'],               layouts: ['layout-split'] },
+    larsolson:      { template: 'template-lars',     themes: ['theme-gradient'],               layouts: ['layout-cardstack'] },
+    lynnandtonic:   { template: 'template-lynn',     themes: ['theme-stripe'],                 layouts: ['layout-split'] },
+    nealfun:        { template: 'template-nealfun',  themes: ['theme-mesh'],                   layouts: ['layout-minimal'] },
+    nealfun_circle: { template: 'template-circle',   themes: ['theme-stripe'],                 layouts: ['layout-minimal'] },
+    briceclain:     { template: 'template-brice',    themes: ['theme-gradient'],               layouts: ['layout-split'] },
+    olaolu:         { template: 'template-olaolu',   themes: ['theme-gradient'],               layouts: ['layout-split'] },
+    adhamdannaway:  { template: 'template-adham',    themes: ['theme-gradient'],               layouts: ['layout-split'] },
+    tamalsen:       { template: 'template-tamal',    themes: ['theme-gradient'],               layouts: ['layout-split'] },
+    constancesouville:{ template:'template-constance',themes:['theme-gradient'],               layouts:['layout-cardstack'] },
+    masontywong:    { template: 'template-mason',    themes: ['theme-gradient'],               layouts: ['layout-split'] },
+    robbowen:       { template: 'template-robbowen', themes: ['theme-gradient'],               layouts: ['layout-split'] },
+    ewankerboas:    { template: 'template-ewan',     themes: ['theme-gradient'],               layouts: ['layout-cardstack'] },
+    auto:           { template: rand() < .5 ? 'template-studio' : 'template-brittany', themes: themeClasses, layouts: layoutClasses }
   };
 
-  const chosenTemplate = templateFamily || toneMap[tone]?.template || 'template-studio';
-  const prefs = toneMap[tone] || toneMap.auto;
+  const prefs = prototypeMap[styleKey] || prototypeMap.auto;
   const themeClass = randChoice(rand, prefs.themes);
   const layoutClass = randChoice(rand, prefs.layouts);
-  portfolio.classList.add(themeClass, layoutClass, chosenTemplate);
+  portfolio.classList.add(themeClass, layoutClass, prefs.template);
 
   const palette = paletteOverride || randChoice(rand, palettes);
   const [c1, c2, c3] = palette;
@@ -263,15 +279,14 @@ function renderProjects(repos, rand) {
   featured.forEach(r => projectsGridEl.appendChild(buildProjectCard(r)));
 }
 
-function buildUniqueLink({ username, placement, seed, customBg, tone, motion, template }) {
+function buildUniqueLink({ username, placement, seed, customBg, style, motion }) {
   const params = new URLSearchParams();
   params.set('user', username);
   params.set('seed', String(seed));
   params.set('place', placement);
   if (customBg) params.set('bg', customBg);
-  if (tone) params.set('tone', tone);
+  if (style) params.set('style', style);
   if (motion) params.set('motion', motion);
-  if (template) params.set('template', template);
   return `${location.origin}${location.pathname}?${params.toString()}`;
 }
 
@@ -281,17 +296,15 @@ function parseParams() {
   const seed = Number(p.get('seed') || 0);
   const place = p.get('place');
   const bg = p.get('bg');
-  const tone = p.get('tone') || 'auto';
+  const style = p.get('style') || 'auto';
   const motion = p.get('motion') || 'moderate';
-  const template = p.get('template');
-  return { user, seed, place, bg, tone, motion, template };
+  return { user, seed, place, bg, style, motion };
 }
 
 async function renderFromParams() {
-  const { user, seed, place, bg, tone, motion, template } = parseParams();
+  const { user, seed, place, bg, style, motion } = parseParams();
   if (!user || !seed) return false;
 
-  // Hide config; show portfolio section
   configSection.hidden = true;
   portfolioSection.hidden = false;
 
@@ -311,7 +324,7 @@ async function renderFromParams() {
 
     const avatarPalette = await derivePaletteFromAvatar(u.avatar_url);
 
-    applyTheme(rand, bg, tone, motion, avatarPalette, template);
+    applyTheme(rand, bg, style, motion, avatarPalette);
 
     const placement = (place && placementOptions.includes(place)) ? place : randChoice(rand, placementOptions);
     renderAvatar(u.avatar_url, placement);
@@ -343,14 +356,14 @@ form.addEventListener('submit', async (e) => {
   const placement = placementSelected === 'random' ? 'random' : placementSelected;
   const useColor = useCustomColorInput.checked;
   const customBg = useColor ? bgColorInput.value : null;
-  const tone = toneSelect.value || 'auto';
-  const motion = motionSelect.value || 'moderate';
+  const style = document.getElementById('prototype').value || 'auto';
+  const motion = document.getElementById('motion').value || 'moderate';
 
   const buf = new Uint32Array(1);
   crypto.getRandomValues(buf);
   const seed = buf[0] || Math.floor(Math.random() * 1e9);
 
-  const link = buildUniqueLink({ username, placement, seed, customBg, tone, motion });
+  const link = buildUniqueLink({ username, placement, seed, customBg, style, motion });
   resultLinkInput.value = link;
   resultWrap.hidden = false;
 });
@@ -363,9 +376,7 @@ copyBtn.addEventListener('click', () => {
 // Auto-render if URL contains params
 (async () => {
   const rendered = await renderFromParams();
-  if (rendered) {
-    // Portfolio already shown; config hidden.
-  } else {
+  if (!rendered) {
     configSection.hidden = false;
     portfolioSection.hidden = true;
   }
