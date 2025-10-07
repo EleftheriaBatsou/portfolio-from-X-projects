@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portfolio Generator</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="container">
+      <h1>Portfolio Generator</h1>
+      <p class="subtitle">Create a responsive, mobile‑friendly portfolio from a GitHub profile.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="config">
+      <h2>Configuration</h2>
+      <form id="config-form">
+        <div class="form-group">
+          <label for="githubUrl">GitHub Profile URL</label>
+          <input type="url" id="githubUrl" name="githubUrl" placeholder="https://github.com/your-username" required />
+          <small class="hint">Example: https://github.com/octocat</small>
+        </div>
+
+        <div class="form-group">
+          <label>Profile Picture Placement</label>
+          <div class="radio-group">
+            <label><input type="radio" name="avatarPlacement" value="header" checked /> Header</label>
+            <label><input type="radio" name="avatarPlacement" value="hero" /> Hero</label>
+          </div>
+          <small class="hint">Your GitHub profile picture will appear only in the selected section.</small>
+        </div>
+
+        <div class="form-group">
+          <label for="useCustomColor">Use a specific background color?</label>
+          <div class="switch">
+            <input type="checkbox" id="useCustomColor" name="useCustomColor" />
+            <span>Yes</span>
+          </div>
+          <div id="colorPickerWrap" class="color-picker-wrap" hidden>
+            <label for="bgColor">Background Color</label>
+            <input type="color" id="bgColor" name="bgColor" value="#0f172a" />
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="submit" id="generateBtn">Generate Portfolio</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="preview">
+      <h2>Live Preview</h2>
+      <div id="portfolio" class="portfolio shell">
+        <header class="portfolio-header">
+          <div class="brand">
+            <div class="avatar-slot header-avatar"></div>
+            <div class="titles">
+              <h1 class="name">Your Name</h1>
+              <p class="tagline">Your bio or tagline will appear here.</p>
+            </div>
+          </div>
+          <nav class="socials header-socials">
+            <!-- Filled by script -->
+          </nav>
+        </header>
+
+        <section class="hero">
+          <div class="hero-inner">
+            <div class="avatar-slot hero-avatar"></div>
+            <div class="hero-text">
+              <h2 class="hero-title">Hello, I'm <span class="name-inline">Your Name</span></h2>
+              <p class="hero-subtitle">This section highlights your work and interests.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="about">
+          <h3>About</h3>
+          <p id="about-text">Your GitHub bio will appear here if available. You can customize this text.</p>
+        </section>
+
+        <section class="links">
+          <h3>Social</h3>
+          <ul id="social-list" class="social-list">
+            <!-- Filled by script -->
+          </ul>
+        </section>
+
+        <footer class="footer">
+          <p>Made with care — <a href="https://cosine.sh" target="_blank" rel="noopener noreferrer">Cosine</a></p>
+        </footer>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
