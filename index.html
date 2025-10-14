@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <main class="container">
+  <main>
     <section class="config" id="config-section">
       <form id="config-form">
         <div class="form-group">
@@ -17,44 +17,13 @@
         </div>
 
         <div class="form-group">
-          <label>Profile Picture Placement</label>
-          <div class="radio-group">
-            <label><input type="radio" name="avatarPlacement" value="random" checked /> Random</label>
-            <label><input type="radio" name="avatarPlacement" value="header" /> Header</label>
-            <label><input type="radio" name="avatarPlacement" value="hero" /> Hero</label>
-          </div>
-          <small class="hint">Your GitHub profile picture will appear only in the selected section.</small>
-        </div>
-
-        <div class="form-group">
-          <label for="prototype">Style (clone)</label>
-          <select id="prototype" name="prototype">
-            <option value="brittanychiang" selected>Brittany (brittanychiang.com)</option>
+          <label for="style">Style</label>
+          <select id="style" name="style">
+            <option value="brittany" selected>Brittany (brittanychiang.com)</option>
             <option value="cassie">Cassie (cassie.codes)</option>
-            <option value="itssharl">Lee (itssharl.ee)</option>
+            <option value="lee">Lee (itssharl.ee)</option>
           </select>
-          <small class="hint">Choose one style; the page will closely match that layout and feel.</small>
-        </div>
-
-        <div class="form-group">
-          <label for="motion">Motion level</label>
-          <select id="motion" name="motion">
-            <option value="subtle">Subtle</option>
-            <option value="moderate" selected>Moderate</option>
-            <option value="energetic">Energetic</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="useCustomColor">Use a specific background color?</label>
-          <div class="switch">
-            <input type="checkbox" id="useCustomColor" name="useCustomColor" />
-            <span>Yes</span>
-          </div>
-          <div id="colorPickerWrap" class="color-picker-wrap" hidden>
-            <label for="bgColor">Background Color</label>
-            <input type="color" id="bgColor" name="bgColor" value="#0f172a" />
-          </div>
+          <small class="hint">Choose one style; the page will closely match that layout.</small>
         </div>
 
         <div class="actions">
@@ -71,49 +40,7 @@
       </form>
     </section>
 
-    <section id="portfolio-section" class="preview" hidden>
-      <div id="portfolio" class="portfolio shell">
-        <header class="portfolio-header">
-          <div class="brand">
-            <div class="avatar-slot header-avatar"></div>
-            <div class="titles">
-              <h1 class="name">Your Name</h1>
-              <p class="tagline">Your bio or tagline will appear here.</p>
-            </div>
-          </div>
-          <nav class="socials header-socials"></nav>
-        </header>
-
-        <section class="hero">
-          <div class="hero-inner">
-            <div class="avatar-slot hero-avatar"></div>
-            <div class="hero-text">
-              <h2 class="hero-title">Hello, I'm <span class="name-inline">Your Name</span></h2>
-              <p class="hero-subtitle">This section highlights your work and interests.</p>
-            </div>
-          </div>
-        </section>
-
-        <section class="projects">
-          <h3>Featured Work</h3>
-          <div id="projects-grid" class="projects-grid"></div>
-        </section>
-
-        <section class="about">
-          <h3>About</h3>
-          <p id="about-text">Your GitHub bio will appear here if available.</p>
-        </section>
-
-        <section class="links">
-          <h3>Social</h3>
-          <ul id="social-list" class="social-list"></ul>
-        </section>
-
-        <footer class="footer">
-          <p>Made with care — <a href="https://cosine.sh" target="_blank" rel="noopener noreferrer">Cosine</a></p>
-        </footer>
-      </div>
-    </section>
+    <section id="render-root" hidden></section>
   </main>
 
   <script src="script.js"></script>
