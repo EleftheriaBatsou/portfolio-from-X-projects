@@ -163,10 +163,14 @@ const renderRoot = document.getElementById('render-root');
 
 function parseParams() {
   const p = new URLSearchParams(location.search);
+  const rawStyle = p.get('style') || 'brittany';
+  // Normalize style (handles cases like "cassie?" or stray punctuation)
+  const style = (rawStyle || '').toLowerCase().replace(/[^a-z]/g, '');
+  const valid = ['brittany','cassie','lee'];
   return {
     user: p.get('user'),
     seed: Number(p.get('seed') || 0),
-    style: p.get('style') || 'brittany'
+    style: valid.includes(style) ? style : 'brittany'
   };
 }
 
