@@ -2,7 +2,6 @@
   --bg: #0f172a;
   --text: #e5e7eb;
   --muted: #9ca3af;
-  --border: #1f2937;
 
   /* dynamic accents */
   --c1: #60a5fa;
@@ -17,16 +16,16 @@ a:hover { text-decoration: underline; }
 
 /* Config */
 .config { max-width: 720px; margin: 24px auto; padding: 16px; }
-form#config-form { border: 1px solid var(--border); border-radius: 12px; padding: 16px; background: rgba(255,255,255,0.03); }
+form#config-form { border-radius: 12px; padding: 16px; background: rgba(255,255,255,0.03); }
 .form-group { margin-bottom: 16px; }
 .form-group label { display: block; font-weight: 600; margin-bottom: 6px; }
 .hint { color: var(--muted); font-size: 12px; }
-input[type="url"], select { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border); background: rgba(255,255,255,0.02); color: var(--text); }
+input[type="url"], select { width: 100%; padding: 10px 12px; border-radius: 8px; border: none; background: rgba(255,255,255,0.06); color: var(--text); }
 .actions { display: flex; gap: 8px; }
 button { border: none; border-radius: 10px; padding: 10px 14px; font-weight: 700; background: #8ab4f8; color: #051026; cursor: pointer; }
 .result { margin-top: 12px; }
 .link-row { display: flex; gap: 8px; }
-#resultLink { flex: 1; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border); background: rgba(255,255,255,0.02); color: var(--text); }
+#resultLink { flex: 1; padding: 10px 12px; border-radius: 8px; border: none; background: rgba(255,255,255,0.06); color: var(--text); }
 
 /* Render root */
 #render-root { min-height: 100vh; }
@@ -40,11 +39,11 @@ button { border: none; border-radius: 10px; padding: 10px 14px; font-weight: 700
 .brittany-name { margin: 0; font-size: 28px; }
 .brittany-tag { margin: 4px 0 12px 0; color: var(--muted); }
 .brittany-socials { display: flex; gap: 8px; flex-wrap: wrap; }
-.brittany-socials a { border: 1px solid var(--border); padding: 6px 8px; border-radius: 999px; font-size: 13px; background: rgba(255,255,255,0.03); }
-.brittany-main section { margin-bottom: 24px; border: 1px solid var(--border); border-radius: 12px; background: rgba(255,255,255,0.03); padding: 16px; }
+.brittany-socials a { padding: 6px 8px; border-radius: 999px; font-size: 13px; background: rgba(255,255,255,0.06); }
+.brittany-main section { margin-bottom: 24px; border-radius: 12px; background: rgba(255,255,255,0.04); padding: 16px; }
 .brittany-main h2 { margin: 0 0 10px 0; font-size: 18px; }
 .brittany-projects { display: grid; grid-template-columns: 1fr; gap: 12px; }
-.brittany-card { border: 1px solid var(--border); border-radius: 10px; background: rgba(255,255,255,0.02); padding: 12px; }
+.brittany-card { border-radius: 10px; background: rgba(255,255,255,0.03); padding: 12px; }
 .brittany-card h3 { margin: 0; font-size: 16px; }
 .brittany-card p { margin: 6px 0; color: var(--muted); font-size: 14px; }
 
@@ -52,15 +51,16 @@ button { border: none; border-radius: 10px; padding: 10px 14px; font-weight: 700
 .style-cassie { max-width: 1100px; margin: 0 auto; }
 .cassie-hero {
   padding: 56px 24px; text-align: center;
-  background: conic-gradient(from 180deg at 50% 50%, var(--c1), var(--c2), var(--c3));
+  /* Purple/Pink brand-inspired background */
+  background: conic-gradient(from 180deg at 50% 50%, #8b5cf6, #ec4899, #f472b6);
 }
-.cassie-title { margin: 0; font-size: 40px; }
-.cassie-sub { margin: 8px 0 0 0; color: #09203f; font-weight: 600; }
+.cassie-title { margin: 0; font-size: 40px; color: #0b1b33; }
+.cassie-sub { margin: 8px 0 0 0; color: #0b1b33; font-weight: 600; }
 .cassie-socials { display: flex; gap: 10px; justify-content: center; margin-top: 12px; }
-.cassie-socials a { border: 1px solid rgba(255,255,255,0.4); padding: 8px 12px; border-radius: 999px; background: rgba(255,255,255,0.3); font-weight: 700; color: #0b1b33; }
+.cassie-socials a { padding: 8px 12px; border-radius: 999px; background: rgba(255,255,255,0.78); font-weight: 700; color: #0b1b33; }
 .cassie-content { padding: 24px; }
 .cassie-projects { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
-.cassie-card { border: 1px solid var(--border); border-radius: 12px; background: rgba(255,255,255,0.03); padding: 12px; }
+.cassie-card { border-radius: 12px; background: rgba(255,255,255,0.06); padding: 12px; }
 .cassie-card h3 { margin: 0; font-size: 16px; }
 .cassie-card p { margin: 6px 0; color: var(--muted); font-size: 14px; }
 
@@ -68,16 +68,16 @@ button { border: none; border-radius: 10px; padding: 10px 14px; font-weight: 700
 .style-lee { max-width: 1100px; margin: 0 auto; }
 .lee-hero {
   display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: center;
-  padding: 48px 24px; background: linear-gradient(135deg, var(--c1), var(--c2));
+  padding: 48px 24px; background: linear-gradient(135deg, #60a5fa, #34d399);
 }
-.lee-hero .avatar { width: 160px; height: 160px; border-radius: 24px; overflow: hidden; border: 3px solid rgba(255,255,255,0.6); justify-self: center; }
-.lee-title { margin: 0; font-size: 34px; }
-.lee-sub { margin: 8px 0 0 0; color: rgba(255,255,255,0.8); }
+.lee-hero .avatar { width: 160px; height: 160px; border-radius: 24px; overflow: hidden; border: none; justify-self: center; }
+.lee-title { margin: 0; font-size: 34px; color: #041224; }
+.lee-sub { margin: 8px 0 0 0; color: rgba(4,18,36,0.8); }
 .lee-socials { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
-.lee-socials a { border: 1px solid rgba(255,255,255,0.5); padding: 6px 10px; border-radius: 999px; background: rgba(255,255,255,0.25); color: #041224; font-weight: 700; }
+.lee-socials a { padding: 6px 10px; border-radius: 999px; background: rgba(255,255,255,0.8); color: #041224; font-weight: 700; }
 .lee-content { padding: 24px; }
 .lee-projects { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
-.lee-card { border: 1px solid var(--border); border-radius: 14px; background: rgba(255,255,255,0.04); padding: 14px; }
+.lee-card { border-radius: 14px; background: rgba(255,255,255,0.06); padding: 14px; }
 .lee-card h3 { margin: 0; font-size: 16px; }
 .lee-card p { margin: 6px 0; color: var(--muted); font-size: 14px; }
 

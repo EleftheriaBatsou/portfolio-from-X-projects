@@ -12,7 +12,6 @@ function mulberry32(seed) {
     return ((t ^ t >>> 14) >>> 0) / 4294967296;
   };
 }
-function randChoice(rand, arr) { return arr[Math.floor(rand() * arr.length)]; }
 
 /* GitHub fetch */
 async function fetchGitHubUser(username) {
@@ -57,30 +56,6 @@ async function derivePaletteFromAvatar(url) {
     };
     img.onerror = () => resolve(null);
   });
-}
-
-/* Random page background */
-function applyRandomBackground(rand, palette=null) {
-  const p = palette || [
-    `hsl(${Math.floor(rand()*360)} 70% 55%)`,
-    `hsl(${Math.floor(rand()*360)} 70% 55%)`,
-    `hsl(${Math.floor(rand()*360)} 70% 55%)`
-  ];
-  const type = randChoice(rand, ['radial','linear','conic','mesh']);
-  let bg;
-  if (type === 'radial') {
-    bg = `radial-gradient(800px 400px at ${Math.floor(rand()*80)}% ${Math.floor(rand()*80)}%, ${p[0]}, transparent 60%), radial-gradient(600px 300px at ${Math.floor(rand()*80)}% ${Math.floor(rand()*80)}%, ${p[1]}, transparent 60%), #0b1020`;
-  } else if (type === 'linear') {
-    bg = `linear-gradient(${Math.floor(rand()*360)}deg, ${p[0]}, ${p[1]}, ${p[2]})`;
-  } else if (type === 'conic') {
-    bg = `conic-gradient(from ${Math.floor(rand()*360)}deg at 50% 50%, ${p[0]}, ${p[1]}, ${p[2]})`;
-  } else {
-    bg = `radial-gradient(1200px 600px at 10% 10%, ${p[0]}, transparent 35%), radial-gradient(800px 400px at 90% 20%, ${p[1]}, transparent 38%), radial-gradient(1000px 500px at 50% 90%, ${p[2]}, transparent 42%), #0b1020`;
-  }
-  document.body.style.background = bg;
-  document.documentElement.style.setProperty('--c1', p[0]);
-  document.documentElement.style.setProperty('--c2', p[1]);
-  document.documentElement.style.setProperty('--c3', p[2]);
 }
 
 /* Project cards */
@@ -240,17 +215,32 @@ copyBtn.addEventListener('click', () => {
   configSection.hidden = true;
   renderRoot.hidden = false;
 
-  const rand = mulberry32(seed);
-
   try {
     const u = await fetchGitHubUser(user);
     const repos = await fetchGitHubRepos(user);
-    const palette = await derivePaletteFromAvatar(u.avatar_url);
-    applyRandomBackground(rand, palette);
 
-    if (style === 'brittany') renderBrittany(renderRoot, u, repos);
-    else if (style === 'cassie') renderCassie(renderRoot, u, repos);
-    else renderLee(renderRoot, u, repos);
+    // Style-specific backgrounds and contrast
+    if (style === 'brittany') {
+      document.documentElement.style.setProperty('--bg', '#0a192f');
+      document.documentElement.style.setProperty('--text', '#ccd6f6');
+      document.documentElement.style.setProperty('--muted', '#8892b0');
+      document.body.style.background = '#0a192f';
+      renderBrittany(renderRoot, u, repos);
+    } else if (style === 'cassie') {
+      // Purple/pink gradient, dark text for contrast
+      document.documentElement.style.setProperty('--bg', 'transparent');
+      document.documentElement.style.setProperty('--text', '#0b1b33');
+      document.documentElement.style.setProperty('--muted', '#233a5c');
+      document.body.style.background = 'conic-gradient(from 180deg at 50% 50%, #8b5cf6, #ec4899, #f472b6)';
+      renderCassie(renderRoot, u, repos);
+    } else {
+      // Lee: blue/green gradient with dark text overlays
+      document.documentElement.style.setProperty('--bg', 'transparent');
+      document.documentElement.style.setProperty('--text', '#041224');
+      document.documentElement.style.setProperty('--muted', 'rgba(4,18,36,0.7)');
+      document.body.style.background = 'linear-gradient(135deg, #60a5fa, #34d399)';
+      renderLee(renderRoot, u, repos);
+    }
   } catch (err) {
     console.error(err);
     alert('Unable to fetch GitHub data.');
