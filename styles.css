@@ -257,45 +257,49 @@ section.about h3, section.links h3 { margin: 0 0 10px 0; font-size: 16px; }
 }
 @keyframes gradientShift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
 
-/* Prototype-inspired template families */
-.template-brittany .portfolio-header { background: transparent; border-bottom: none; }
-.template-brittany .hero { background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0)); }
+/* Prototype-inspired template families (focused clones) */
+/* 1) Brittany (brittanychiang.com) — editorial, minimal, single column */
+.template-brittany .portfolio-header { display: none; }
+.template-brittany .hero {
+  background: none;
+  padding: 48px 0;
+}
+.template-brittany .hero-title {
+  font-size: 34px;
+  line-height: 1.3;
+  letter-spacing: 0.2px;
+}
+.template-brittany .hero-subtitle {
+  margin-top: 10px;
+  color: var(--muted);
+}
 .template-brittany .projects-grid { grid-template-columns: 1fr; }
-.template-brittany .project-card { background: rgba(255,255,255,0.02); border-radius: 10px; }
+.template-brittany .project-card {
+  background: rgba(255,255,255,0.02);
+  border-radius: 10px;
+  padding: 16px;
+}
 
-.template-bruno .hero { background: radial-gradient(circle at 20% 30%, var(--c1), transparent 60%), radial-gradient(circle at 80% 70%, var(--c2), transparent 60%); }
-.template-bruno .project-card:hover { transform: rotate(-0.5deg) translateY(-4px); }
-
-.template-cassie .hero { background: conic-gradient(from 180deg at 50% 50%, var(--c1), var(--c2), var(--c3)); }
+/* 2) Cassie (cassie.codes) — vivid motion, conic gradients, playful accents */
+.template-cassie .portfolio-header { background: transparent; border-bottom: none; }
+.template-cassie .hero {
+  background: conic-gradient(from 180deg at 50% 50%, var(--c1), var(--c2), var(--c3));
+  padding: 56px 16px;
+}
+.template-cassie .hero-title { font-size: 36px; }
 .template-cassie .header-socials a { box-shadow: 0 0 0 2px rgba(255,255,255,0.08) inset; }
 
-.template-annie .hero { background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)); }
-.template-itssharl .hero { background: linear-gradient(135deg, var(--c1), var(--c2)); }
-.template-jesse .hero { background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0)); }
-.template-jhey .portfolio-header { background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0)); }
-.template-jhey .project-card { border: none; box-shadow: 0 0 0 1px var(--border) inset; }
-.template-adamhartwig .hero { background: radial-gradient(circle at 10% 50%, var(--c1), transparent 60%); }
-.template-kaleb .hero { background: linear-gradient(135deg, var(--c2), var(--c3)); }
-.template-lars .hero { background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0)); }
-.template-lynn .hero { background: linear-gradient(90deg, var(--c1), var(--c2)); }
-.template-nealfun .hero { background: radial-gradient(circle at 50% 50%, var(--c1), var(--c2)); }
-.template-circle .hero { background: conic-gradient(from 0deg at 50% 50%, var(--c1), var(--c2), var(--c3)); }
-.template-brice .hero { background: linear-gradient(135deg, var(--c1), var(--c2)); }
-.template-olaolu .hero { background: linear-gradient(135deg, var(--c1), var(--c2)); }
-.template-adham .hero { background: linear-gradient(135deg, var(--c1), var(--c3)); }
-.template-tamal .hero { background: linear-gradient(135deg, var(--c2), var(--c3)); }
-.template-constance .hero { background: linear-gradient(135deg, var(--c3), var(--c1)); }
-.template-mason .hero { background: linear-gradient(135deg, var(--c1), var(--c3)); }
-.template-robbowen .hero { background: linear-gradient(135deg, var(--c2), var(--c1)); }
-.template-ewan .hero { background: linear-gradient(135deg, var(--c1), var(--c2)); }
-
-/* General families when needed */
-.template-studio .projects-grid { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
-.template-studio .project-card { padding: 16px; }
-.template-oss .projects h3 { font-weight: 700; letter-spacing: .3px; }
-.template-oss .project-meta .badge { background: rgba(255,255,255,0.06); }
-.template-advocate .header-socials a { background: rgba(255,255,255,0.06); }
-.template-blog .projects-grid { grid-template-columns: 1fr; }
+/* 3) Lee (itssharl.ee) — gradient hero, split layout */
+.template-itssharl .portfolio-header {
+  background: transparent;
+  border-bottom: none;
+}
+.template-itssharl .hero {
+  background: linear-gradient(135deg, var(--c1), var(--c2));
+  padding: 48px 16px;
+}
+.template-itssharl.layout-split .hero-inner { grid-template-columns: 1fr 1fr; }
+.template-itssharl .project-card { border: none; box-shadow: 0 0 0 1px var(--border) inset; }
 
 /* Layout variants */
 .layout-sidebar .portfolio-header { flex-direction: column; align-items: flex-start; gap: 16px; background: rgba(255,255,255,0.03); }

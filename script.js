@@ -144,36 +144,18 @@ function applyTheme(rand, customBgHex, styleKey, motion, paletteOverride=null) {
     'template-adham', 'template-tamal', 'template-constance', 'template-mason', 'template-robbowen', 'template-ewan'
   );
 
-  const prototypeMap = {
-    brittanychiang: { template: 'template-brittany', themes: ['theme-gradient','theme-glass'], layouts: ['layout-minimal','layout-cardstack'] },
-    brunosimon:     { template: 'template-bruno',    themes: ['theme-mesh','theme-stripe'],   layouts: ['layout-split','layout-sidebar'] },
-    cassie:         { template: 'template-cassie',   themes: ['theme-stripe','theme-mesh'],   layouts: ['layout-split','layout-cardstack'] },
-    anniebombanie:  { template: 'template-annie',    themes: ['theme-gradient'],               layouts: ['layout-cardstack'] },
-    itssharl:       { template: 'template-itssharl', themes: ['theme-gradient'],               layouts: ['layout-split'] },
-    jessezhou:      { template: 'template-jesse',    themes: ['theme-gradient'],               layouts: ['layout-cardstack'] },
-    jhey:           { template: 'template-jhey',     themes: ['theme-gradient','theme-stripe'],layouts: ['layout-split','layout-cardstack'] },
-    adamhartwig:    { template: 'template-adamhartwig', themes: ['theme-mesh'],               layouts: ['layout-split'] },
-    kalebmckelvey:  { template: 'template-kaleb',    themes: ['theme-gradient'],               layouts: ['layout-split'] },
-    larsolson:      { template: 'template-lars',     themes: ['theme-gradient'],               layouts: ['layout-cardstack'] },
-    lynnandtonic:   { template: 'template-lynn',     themes: ['theme-stripe'],                 layouts: ['layout-split'] },
-    nealfun:        { template: 'template-nealfun',  themes: ['theme-mesh'],                   layouts: ['layout-minimal'] },
-    nealfun_circle: { template: 'template-circle',   themes: ['theme-stripe'],                 layouts: ['layout-minimal'] },
-    briceclain:     { template: 'template-brice',    themes: ['theme-gradient'],               layouts: ['layout-split'] },
-    olaolu:         { template: 'template-olaolu',   themes: ['theme-gradient'],               layouts: ['layout-split'] },
-    adhamdannaway:  { template: 'template-adham',    themes: ['theme-gradient'],               layouts: ['layout-split'] },
-    tamalsen:       { template: 'template-tamal',    themes: ['theme-gradient'],               layouts: ['layout-split'] },
-    constancesouville:{ template:'template-constance',themes:['theme-gradient'],               layouts:['layout-cardstack'] },
-    masontywong:    { template: 'template-mason',    themes: ['theme-gradient'],               layouts: ['layout-split'] },
-    robbowen:       { template: 'template-robbowen', themes: ['theme-gradient'],               layouts: ['layout-split'] },
-    ewankerboas:    { template: 'template-ewan',     themes: ['theme-gradient'],               layouts: ['layout-cardstack'] },
-    auto:           { template: rand() < .5 ? 'template-studio' : 'template-brittany', themes: themeClasses, layouts: layoutClasses }
+  // Strict mapping: exact theme/layout per chosen style (no randomness in layout/theme)
+  const fixedMap = {
+    brittanychiang: { template: 'template-brittany', theme: 'theme-gradient', layout: 'layout-minimal' },
+    cassie:         { template: 'template-cassie',   theme: 'theme-stripe',  layout: 'layout-split' },
+    itssharl:       { template: 'template-itssharl', theme: 'theme-gradient', layout: 'layout-split' },
+    auto:           { template: 'template-brittany', theme: 'theme-gradient', layout: 'layout-minimal' }
   };
 
-  const prefs = prototypeMap[styleKey] || prototypeMap.auto;
-  const themeClass = randChoice(rand, prefs.themes);
-  const layoutClass = randChoice(rand, prefs.layouts);
-  portfolio.classList.add(themeClass, layoutClass, prefs.template);
+  const prefs = fixedMap[styleKey] || fixedMap.auto;
+  portfolio.classList.add(prefs.theme, prefs.layout, prefs.template);
 
+  // Colors and alpha
   const palette = paletteOverride || randChoice(rand, palettes);
   const [c1, c2, c3] = palette;
   const alphaBase = { subtle: 0.65, moderate: 0.8, energetic: 0.95 }[motion] || 0.8;
@@ -192,7 +174,9 @@ function applyTheme(rand, customBgHex, styleKey, motion, paletteOverride=null) {
   const heroEl = document.querySelector('.hero');
   heroEl.querySelectorAll('.blob').forEach(b => b.remove());
   const blobChance = motion === 'energetic' ? 0.85 : motion === 'moderate' ? 0.6 : 0.35;
-  if (themeClass === 'theme-mesh' || rand() < blobChance) {
+
+  // Add blobs only for Cassie or energetic mode to echo playful motion
+  if (prefs.template === 'template-cassie' || rand() < blobChance) {
     for (let i = 0; i < 3; i++) {
       const blob = document.createElement('div');
       blob.className = 'blob';
