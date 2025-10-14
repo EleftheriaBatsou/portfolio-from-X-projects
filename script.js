@@ -301,6 +301,38 @@ function parseParams() {
   return { user, seed, place, bg, style, motion };
 }
 
+function applyRandomBackground(rand, paletteOverride=null) {
+  // Generate random background using HSL and gradients; apply to :root vars
+  const root = document.documentElement;
+  const usePalette = paletteOverride || [
+    `hsl(${Math.floor(rand()*360)} ${60 + Math.floor(rand()*30)}% ${50 + Math.floor(rand()*20)}%)`,
+    `hsl(${Math.floor(rand()*360)} ${60 + Math.floor(rand()*30)}% ${50 + Math.floor(rand()*20)}%)`,
+    `hsl(${Math.floor(rand()*360)} ${60 + Math.floor(rand()*30)}% ${50 + Math.floor(rand()*20)}%)`
+  ];
+  const [p1, p2, p3] = usePalette;
+
+  // Random gradient style
+  const gradientType = randChoice(rand, ['radial', 'linear', 'conic', 'mesh']);
+  let bgCss = '';
+  if (gradientType === 'radial') {
+    bgCss = `radial-gradient(800px 400px at ${Math.floor(rand()*80)}% ${Math.floor(rand()*80)}%, ${p1}, transparent 60%), radial-gradient(600px 300px at ${Math.floor(rand()*80)}% ${Math.floor(rand()*80)}%, ${p2}, transparent 60%), #0b1020`;
+  } else if (gradientType === 'linear') {
+    bgCss = `linear-gradient(${Math.floor(rand()*360)}deg, ${p1}, ${p2}, ${p3})`;
+  } else if (gradientType === 'conic') {
+    bgCss = `conic-gradient(from ${Math.floor(rand()*360)}deg at 50% 50%, ${p1}, ${p2}, ${p3})`;
+  } else { // mesh
+    bgCss = `
+      radial-gradient(1200px 600px at 10% 10%, ${p1}, transparent 35%),
+      radial-gradient(800px 400px at 90% 20%, ${p2}, transparent 38%),
+      radial-gradient(1000px 500px at 50% 90%, ${p3}, transparent 42%),
+      #0b1020
+    `;
+  }
+
+  root.style.setProperty('--bg', 'transparent'); // allow body gradient layer
+  document.body.style.background = bgCss;
+}
+
 async function renderFromParams() {
   const { user, seed, place, bg, style, motion } = parseParams();
   if (!user || !seed) return false;
@@ -323,6 +355,9 @@ async function renderFromParams() {
     aboutTextEl.textContent = bio;
 
     const avatarPalette = await derivePaletteFromAvatar(u.avatar_url);
+
+    // Truly random background per portfolio
+    applyRandomBackground(rand, avatarPalette);
 
     applyTheme(rand, bg, style, motion, avatarPalette);
 

@@ -1,5 +1,5 @@
 :root {
-  --bg: #0f172a;
+  --bg: #0f172a;        /* Will be overridden per portfolio for true randomness */
   --bg-soft: #111827;
   --text: #e5e7eb;
   --muted: #9ca3af;
@@ -20,6 +20,7 @@
 html, body {
   margin: 0;
   padding: 0;
+  min-height: 100%;
   background: var(--bg);
   color: var(--text);
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -88,7 +89,9 @@ button#generateBtn:hover, #copyBtn:hover { filter: brightness(1.05); }
 
 /* Portfolio Shell */
 .portfolio.shell {
-  background: var(--bg);
+  min-height: 100vh;           /* Full-page height */
+  width: 100%;
+  background: transparent;      /* Let body/bg layers show through */
   border: 1px solid var(--border);
   border-radius: 16px;
   overflow: hidden;
@@ -235,22 +238,15 @@ section.about h3, section.links h3 { margin: 0 0 10px 0; font-size: 16px; }
 
 /* Base THEME VARIANTS */
 .theme-glass .portfolio.shell {
-  background: linear-gradient(180deg, rgba(17,24,39,.6), rgba(17,24,39,.8));
+  background: linear-gradient(180deg, rgba(17,24,39,.35), rgba(17,24,39,.55)); /* lighter to show body bg */
   backdrop-filter: blur(14px);
   border: 1px solid rgba(255,255,255,0.12);
 }
 .theme-gradient .portfolio.shell {
-  background: linear-gradient(135deg, rgba(0,0,0,.6), rgba(255,255,255,.04)),
-    linear-gradient(120deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)),
-    linear-gradient(180deg, color-mix(in oklab, var(--c1) var(--alpha*100%), transparent), color-mix(in oklab, var(--c2) calc(var(--alpha)*100%), transparent));
+  background: linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
 }
 .theme-mesh .portfolio.shell {
-  background:
-    radial-gradient(1200px 600px at 10% 10%, color-mix(in oklab, var(--c1) 40%, transparent), transparent 35%),
-    radial-gradient(800px 400px at 90% 20%, color-mix(in oklab, var(--c2) 40%, transparent), transparent 38%),
-    radial-gradient(1000px 500px at 50% 90%, color-mix(in oklab, var(--c3) 40%, transparent), transparent 42%),
-    #0b1020;
-  animation: hue 40s linear infinite;
+  background: transparent; /* let body mesh show */
 }
 @keyframes hue { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(360deg); } }
 
