@@ -80,6 +80,40 @@ function computeStatsAndTech(repos, user) {
   };
 }
 
+/* Language colors map (subset of GitHub linguist palette) */
+const LANGUAGE_COLORS = {
+  JavaScript: '#f1e05a',
+  TypeScript: '#3178c6',
+  Python: '#3572A5',
+  Java: '#b07219',
+  C: '#555555',
+  'C++': '#f34b7d',
+  'C#': '#178600',
+  Go: '#00ADD8',
+  Rust: '#dea584',
+  Ruby: '#701516',
+  PHP: '#4F5D95',
+  HTML: '#e34c26',
+  CSS: '#563d7c',
+  Shell: '#89e051',
+  Swift: '#ffac45',
+  Kotlin: '#A97BFF',
+  Dart: '#00B4AB'
+};
+
+function renderTechBadges(container, stats) {
+  container.innerHTML = '';
+  if (!stats.techList.length) return;
+  stats.techList.forEach(item => {
+    const lang = item.split(' ')[0];
+    const color = LANGUAGE_COLORS[lang] || '#9ca3af';
+    const badge = document.createElement('span');
+    badge.className = 'badge';
+    badge.innerHTML = `<span class="dot" style="background:${color}"></span><span>${item}</span>`;
+    container.appendChild(badge);
+  });
+}
+
 /* Project cards */
 function appendProjects(container, repos, cardClass) {
   const featured = (repos || [])
@@ -126,7 +160,7 @@ function renderBrittany(root, user, repos) {
         <p style="margin:6px 0;color:var(--muted);font-size:14px;">
           Followers: ${stats.followers} • Following: ${stats.following} • Repos: ${stats.reposCount} • ⭐ ${stats.stars} • ⑂ ${stats.forks}
         </p>
-        ${stats.techList.length ? `<p>${stats.techList.join(' • ')}</p>` : `<p>No languages detected from public repos.</p>`}
+        <div class="tech-badges" id="tech-badges-brittany"></div>
       </section>
       <section>
         <h2>Checkout My Projects</h2>
@@ -134,6 +168,7 @@ function renderBrittany(root, user, repos) {
       </section>
     </div>
   `;
+  renderTechBadges(document.getElementById('tech-badges-brittany'), stats);
   appendProjects(root.querySelector('#brittany-projects'), repos, 'brittany-card');
 }
 
@@ -156,13 +191,14 @@ function renderCassie(root, user, repos) {
       <p style="margin:6px 0;color:#253b5a;font-size:14px;">
         Followers: ${stats.followers} • Following: ${stats.following} • Repos: ${stats.reposCount} • ⭐ ${stats.stars} • ⑂ ${stats.forks}
       </p>
-      ${stats.techList.length ? `<p style="color:#0b1b33;">${stats.techList.join(' • ')}</p>` : `<p>No languages detected from public repos.</p>`}
+      <div class="tech-badges" id="tech-badges-cassie"></div>
       <h2>Checkout My Projects</h2>
       <div class="cassie-projects" id="cassie-projects"></div>
       <h2>About</h2>
       <p>${user.bio || 'This user has no bio set on GitHub.'}</p>
     </section>
   `;
+  renderTechBadges(document.getElementById('tech-badges-cassie'), stats);
   appendProjects(root.querySelector('#cassie-projects'), repos, 'cassie-card');
 }
 
@@ -187,13 +223,14 @@ function renderLee(root, user, repos) {
       <p style="margin:6px 0;color:var(--muted);font-size:14px;">
         Followers: ${stats.followers} • Following: ${stats.following} • Repos: ${stats.reposCount} • ⭐ ${stats.stars} • ⑂ ${stats.forks}
       </p>
-      ${stats.techList.length ? `<p>${stats.techList.join(' • ')}</p>` : `<p>No languages detected from public repos.</p>`}
+      <div class="tech-badges" id="tech-badges-lee"></div>
       <h2>Checkout My Projects</h2>
       <div class="lee-projects" id="lee-projects"></div>
       <h2>About</h2>
       <p>${user.bio || 'This user has no bio set on GitHub.'}</p>
     </section>
   `;
+  renderTechBadges(document.getElementById('tech-badges-lee'), stats);
   appendProjects(root.querySelector('#lee-projects'), repos, 'lee-card');
 }
 
@@ -279,14 +316,14 @@ copyBtn.addEventListener('click', () => {
       document.documentElement.style.setProperty('--bg', 'transparent');
       document.documentElement.style.setProperty('--text', '#0b1b33');
       document.documentElement.style.setProperty('--muted', '#233a5c');
-      document.body.style.background = 'conic-gradient(from 180deg at 50% 50%, #8b5cf6, #ec4899, #f472b6)';
+      document.body.style.background = 'conic-gradient(from 180deg at 50% 50%, #7c3aed, #ec4899, #f472b6)';
       renderCassie(renderRoot, u, repos);
     } else {
-      // Lee: blue/green gradient with dark text overlays
+      // Lee: refined indigo -> cyan gradient with improved contrast
       document.documentElement.style.setProperty('--bg', 'transparent');
       document.documentElement.style.setProperty('--text', '#041224');
       document.documentElement.style.setProperty('--muted', 'rgba(4,18,36,0.7)');
-      document.body.style.background = 'linear-gradient(135deg, #60a5fa, #34d399)';
+      document.body.style.background = 'linear-gradient(135deg, #4f46e5, #22d3ee)';
       renderLee(renderRoot, u, repos);
     }
   } catch (err) {
