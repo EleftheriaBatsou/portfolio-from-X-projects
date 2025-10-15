@@ -58,6 +58,8 @@ button { border: none; border-radius: 10px; padding: 10px 14px; font-weight: 700
 .brittany-socials a { padding: 8px 10px; border-radius: 999px; font-size: 13px; background: rgba(255,255,255,0.06); }
 .brittany-main section { margin-bottom: 28px; border-radius: 12px; background: rgba(255,255,255,0.04); padding: 18px; }
 .brittany-main h2 { margin: 0 0 12px 0; font-size: 20px; font-weight: 600; }
+.about-block { background: #8b5cf6; color: #0b1b33; border-radius: 12px; padding: 16px; }
+.about-block h1, .about-block h2, .about-block h3, .about-block h4, .about-block p { color: #0b1b33; }
 .brittany-projects { display: grid; grid-template-columns: 1fr; gap: 14px; }
 .brittany-card { border-radius: 12px; background: rgba(255,255,255,0.03); padding: 14px; }
 .brittany-card h3 { margin: 0; font-size: 18px; font-weight: 600; }
@@ -76,6 +78,8 @@ button { border: none; border-radius: 10px; padding: 10px 14px; font-weight: 700
 .cassie-socials { display: flex; gap: 12px; justify-content: center; margin-top: 20px; }
 .cassie-socials a { padding: 10px 16px; border-radius: 999px; background: rgba(255,255,255,0.9); font-weight: 700; color: #0b1b33; }
 .cassie-content { padding: 32px; }
+.about-block { background: #8b5cf6; color: #0b1b33; border-radius: 12px; padding: 16px; }
+.about-block h1, .about-block h2, .about-block h3, .about-block h4, .about-block p { color: #0b1b33; }
 .cassie-projects { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
 .cassie-card { border-radius: 16px; background: #ffffff; padding: 16px; color: #0b1b33; }
 .cassie-card h3 { margin: 0; font-size: 20px; font-weight: 700; }
@@ -94,6 +98,8 @@ button { border: none; border-radius: 10px; padding: 10px 14px; font-weight: 700
 .lee-socials { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
 .lee-socials a { padding: 8px 12px; border-radius: 999px; background: rgba(255,255,255,0.18); color: #ffffff; font-weight: 700; backdrop-filter: saturate(120%) blur(4px); }
 .lee-content { padding: 28px; }
+.about-block { background: #8b5cf6; color: #0b1b33; border-radius: 12px; padding: 16px; }
+.about-block h1, .about-block h2, .about-block h3, .about-block h4, .about-block p { color: #0b1b33; }
 .lee-projects { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
 .lee-card { border-radius: 16px; background: rgba(255,255,255,0.10); padding: 16px; backdrop-filter: saturate(110%) blur(2px); color: #f8fafc; }
 .lee-card h3 { margin: 0; font-size: 18px; font-weight: 600; color: #f8fafc; }

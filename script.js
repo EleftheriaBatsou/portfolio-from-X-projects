@@ -265,11 +265,11 @@ function renderBrittany(root, user, repos, readmeHtml) {
       </div>
     </aside>
     <div class="brittany-main">
-      <section>
+      <section class="about-block">
         <h2>About</h2>
         <p>${user.bio || 'This user has no bio set on GitHub.'}</p>
+        ${readmeHtml ? `<div>${readmeHtml}</div>` : ''}
       </section>
-      ${readmeHtml ? `<section><h2>Profile README</h2><div>${readmeHtml}</div></section>` : ''}
       <section>
         <h2>Achievements</h2>
         <div class="achievements" id="achievements-brittany"></div>
@@ -304,9 +304,11 @@ function renderCassie(root, user, repos, readmeHtml) {
       <div class="achievements" id="achievements-cassie"></div>
       <h2>Checkout My Projects</h2>
       <div class="cassie-projects" id="cassie-projects"></div>
-      <h2>About</h2>
-      <p>${user.bio || 'This user has no bio set on GitHub.'}</p>
-      ${readmeHtml ? `<h2>Profile README</h2><div>${readmeHtml}</div>` : ''}
+      <section class="about-block">
+        <h2>About</h2>
+        <p>${user.bio || 'This user has no bio set on GitHub.'}</p>
+        ${readmeHtml ? `<div>${readmeHtml}</div>` : ''}
+      </section>
     </section>
   `;
   renderAchievements(document.getElementById('achievements-cassie'), achievements);
@@ -335,9 +337,11 @@ function renderLee(root, user, repos, readmeHtml) {
       <div class="achievements" id="achievements-lee"></div>
       <h2>Checkout My Projects</h2>
       <div class="lee-projects" id="lee-projects"></div>
-      <h2>About</h2>
-      <p>${user.bio || 'This user has no bio set on GitHub.'}</p>
-      ${readmeHtml ? `<h2>Profile README</h2><div>${readmeHtml}</div>` : ''}
+      <section class="about-block">
+        <h2>About</h2>
+        <p>${user.bio || 'This user has no bio set on GitHub.'}</p>
+        ${readmeHtml ? `<div>${readmeHtml}</div>` : ''}
+      </section>
     </section>
   `;
   renderAchievements(document.getElementById('achievements-lee'), achievements);
