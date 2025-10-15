@@ -227,14 +227,28 @@ function appendProjects(container, repos, cardClass) {
 /* Achievements: fetch from GitHub profile achievements tab and render only those */
 async function fetchUserAchievements(username) {
   try {
-    const resp = await fetch(`https://github.com/${username}?tab=achievements`, { mode: 'cors' });
+    // Use a public read-only proxy to bypass GitHub's CORS on HTML pages
+    // r.jina.ai fetches the page and returns it with permissive CORS
+    const proxyUrl = `https://r.jina.ai/http://github.com/${username}?tab=achievements`;
+    const resp = await fetch(proxyUrl);
     if (!resp.ok) return [];
     const html = await resp.text();
-    // Parse <img ... alt="..." src="...achievements/..."> occurrences
+
+    // Parse achievement items: look for <img ... alt="..." src="...achievements...">
     const matches = [...html.matchAll(/<img[^>]*alt="([^"]+)"[^>]*src="([^"]+achievements[^"]+)"/g)];
     const seen = new Set();
-    const items = matches.map((m) => ({ label: m[1], icon: m[2] }));
-    // Deduplicate by label
+    const items = matches.map((m) => {
+      let src = m[2];
+      // Normalize relative src to absolute
+      if (src.startsWith('/')) {
+        src = `https://github.com${src}`;
+      } else if (src.startsWith('//')) {
+        src = `https:${src}`;
+      }
+      return { label: m[1], icon: src };
+    });
+
+    // Deduplicate by label and keep order
     const unique = [];
     for (const it of items) {
       const key = it.label.toLowerCase();
@@ -244,7 +258,8 @@ async function fetchUserAchievements(username) {
       }
     }
     return unique;
-  } catch {
+  } catch (e) {
+    console.error('Failed to fetch achievements', e);
     return [];
   }
 }
