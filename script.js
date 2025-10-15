@@ -135,10 +135,34 @@ function appendProjects(container, repos, cardClass) {
   });
 }
 
+/* Achievements (derived heuristics without scraping) */
+function deriveAchievements(stats) {
+  const a = [];
+  if (stats.reposCount >= 30) a.push({ label: 'Prolific Creator', desc: `Created ${stats.reposCount}+ original repositories` });
+  if (stats.stars >= 100) a.push({ label: 'Starstruck', desc: `Accumulated ${stats.stars}+ stars across repositories` });
+  if (stats.forks >= 50) a.push({ label: 'Fork Friendly', desc: `Projects have been forked ${stats.forks}+ times` });
+  if (stats.followers >= 50) a.push({ label: 'Community Builder', desc: `Followed by ${stats.followers}+ developers` });
+  if (stats.techList.length >= 5) a.push({ label: 'Polyglot', desc: `Works across ${stats.techList.length}+ languages` });
+  // Always include top languages if any
+  return a.length ? a : [{ label: 'Getting Started', desc: 'Building up your open-source journey' }];
+}
+
+function renderAchievements(container, achievements) {
+  container.innerHTML = '';
+  achievements.forEach(item => {
+    const badge = document.createElement('span');
+    badge.className = 'badge';
+    badge.innerHTML = `<span>${item.label}</span>`;
+    badge.title = item.desc;
+    container.appendChild(badge);
+  });
+}
+
 /* Layout builders */
 function renderBrittany(root, user, repos) {
   root.className = 'style-brittany';
   const stats = computeStatsAndTech(repos, user);
+  const achievements = deriveAchievements(stats);
   root.innerHTML = `
     <aside class="brittany-sidebar">
       ${user.avatar_url ? `<div class="avatar"><img src="${user.avatar_url}" alt="avatar" width="96" height="96"></div>` : ''}
@@ -156,11 +180,8 @@ function renderBrittany(root, user, repos) {
         <p>${user.bio || 'This user has no bio set on GitHub.'}</p>
       </section>
       <section>
-        <h2>My Github Stats && Technologies I use:</h2>
-        <p style="margin:6px 0;color:var(--muted);font-size:14px;">
-          Followers: ${stats.followers} • Following: ${stats.following} • Repos: ${stats.reposCount} • ⭐ ${stats.stars} • ⑂ ${stats.forks}
-        </p>
-        <div class="tech-badges" id="tech-badges-brittany"></div>
+        <h2>Achievements</h2>
+        <div class="tech-badges" id="achievements-brittany"></div>
       </section>
       <section>
         <h2>Checkout My Projects</h2>
@@ -168,13 +189,14 @@ function renderBrittany(root, user, repos) {
       </section>
     </div>
   `;
-  renderTechBadges(document.getElementById('tech-badges-brittany'), stats);
+  renderAchievements(document.getElementById('achievements-brittany'), achievements);
   appendProjects(root.querySelector('#brittany-projects'), repos, 'brittany-card');
 }
 
 function renderCassie(root, user, repos) {
   root.className = 'style-cassie';
   const stats = computeStatsAndTech(repos, user);
+  const achievements = deriveAchievements(stats);
   root.innerHTML = `
     <section class="cassie-hero">
       ${user.avatar_url ? `<div class="avatar"><img src="${user.avatar_url}" alt="avatar" width="120" height="120"></div>` : ''}
@@ -187,24 +209,22 @@ function renderCassie(root, user, repos) {
       </div>
     </section>
     <section class="cassie-content">
-      <h2>My Github Stats && Technologies I use:</h2>
-      <p style="margin:6px 0;color:#253b5a;font-size:14px;">
-        Followers: ${stats.followers} • Following: ${stats.following} • Repos: ${stats.reposCount} • ⭐ ${stats.stars} • ⑂ ${stats.forks}
-      </p>
-      <div class="tech-badges" id="tech-badges-cassie"></div>
+      <h2>Achievements</h2>
+      <div class="tech-badges" id="achievements-cassie"></div>
       <h2>Checkout My Projects</h2>
       <div class="cassie-projects" id="cassie-projects"></div>
       <h2>About</h2>
       <p>${user.bio || 'This user has no bio set on GitHub.'}</p>
     </section>
   `;
-  renderTechBadges(document.getElementById('tech-badges-cassie'), stats);
+  renderAchievements(document.getElementById('achievements-cassie'), achievements);
   appendProjects(root.querySelector('#cassie-projects'), repos, 'cassie-card');
 }
 
 function renderLee(root, user, repos) {
   root.className = 'style-lee';
   const stats = computeStatsAndTech(repos, user);
+  const achievements = deriveAchievements(stats);
   root.innerHTML = `
     <section class="lee-hero">
       <div class="avatar">${user.avatar_url ? `<img src="${user.avatar_url}" alt="avatar" width="170" height="170">` : ''}</div>
@@ -219,18 +239,15 @@ function renderLee(root, user, repos) {
       </div>
     </section>
     <section class="lee-content">
-      <h2>My Github Stats && Technologies I use:</h2>
-      <p style="margin:6px 0;color:var(--muted);font-size:14px;">
-        Followers: ${stats.followers} • Following: ${stats.following} • Repos: ${stats.reposCount} • ⭐ ${stats.stars} • ⑂ ${stats.forks}
-      </p>
-      <div class="tech-badges" id="tech-badges-lee"></div>
+      <h2>Achievements</h2>
+      <div class="tech-badges" id="achievements-lee"></div>
       <h2>Checkout My Projects</h2>
       <div class="lee-projects" id="lee-projects"></div>
       <h2>About</h2>
       <p>${user.bio || 'This user has no bio set on GitHub.'}</p>
     </section>
   `;
-  renderTechBadges(document.getElementById('tech-badges-lee'), stats);
+  renderAchievements(document.getElementById('achievements-lee'), achievements);
   appendProjects(root.querySelector('#lee-projects'), repos, 'lee-card');
 }
 
