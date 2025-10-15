@@ -224,21 +224,42 @@ function appendProjects(container, repos, cardClass) {
   });
 }
 
-/* Achievements (derived heuristics without scraping) */
-function deriveAchievements(stats, username) {
-  const a = [];
-  // Heuristic achievements
-  if (stats.reposCount >= 30) a.push({ label: 'Prolific Creator', desc: `Created ${stats.reposCount}+ original repositories` });
-  if (stats.stars >= 100) a.push({ label: 'Starstruck', desc: `Accumulated ${stats.stars}+ stars across repositories`, icon: 'https://github.githubassets.com/images/modules/profile/achievements/starstruck-default.png' });
-  if (stats.forks >= 50) a.push({ label: 'Fork Friendly', desc: `Projects have been forked ${stats.forks}+ times` });
-  if (stats.techList.length >= 5) a.push({ label: 'Polyglot', desc: `Works across ${stats.techList.length}+ languages` });
-
-  // Specific user mappings (attachments via GitHub asset URLs)
-  if (username) {
-    const u = username.toLowerCase();
-    if (u === 'luc-constantin') {
-      a.push({ label: 'Quickdraw', desc: 'Fast response in issues or PRs', icon: 'https://github.githubassets.com/images/modules/profile/achievements/quickdraw-default.png' });
+/* Achievements: fetch from GitHub profile achievements tab and render only those */
+async function fetchUserAchievements(username) {
+  try {
+    const resp = await fetch(`https://github.com/${username}?tab=achievements`, { mode: 'cors' });
+    if (!resp.ok) return [];
+    const html = await resp.text();
+    // Parse <img ... alt="..." src="...achievements/..."> occurrences
+    const matches = [...html.matchAll(/<img[^>]*alt="([^"]+)"[^>]*src="([^"]+achievements[^"]+)"/g)];
+    const seen = new Set();
+    const items = matches.map((m) => ({ label: m[1], icon: m[2] }));
+    // Deduplicate by label
+    const unique = [];
+    for (const it of items) {
+      const key = it.label.toLowerCase();
+      if (!seen.has(key)) {
+        seen.add(key);
+        unique.push(it);
+      }
     }
+    return unique;
+  } catch {
+    return [];
+  }
+}
+
+function renderAchievements(container, achievements) {
+  container.innerHTML = '';
+  if (!achievements || !achievements.length) return;
+  achievements.forEach(item => {
+    const badge = document.createElement('span');
+    badge.className = 'achievement';
+    const iconHtml = item.icon ? `<img src="${item.icon}" alt="${item.label} icon">` : '';
+    badge.innerHTML = `${iconHtml}<span>${item.label}</span>`;
+    container.appendChild(badge);
+  });
+}
     if (u === 'momo5502') {
       // Show 6 common achievements
       a.push({ label: 'Pull Shark', desc: 'Merged pull requests', icon: 'https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png' });
@@ -266,10 +287,8 @@ function renderAchievements(container, achievements) {
 }
 
 /* Layout builders */
-function renderBrittany(root, user, repos, readmeHtml) {
+function renderBrittany(root, user, repos, readmeHtml, achievements) {
   root.className = 'style-brittany';
-  const stats = computeStatsAndTech(repos, user);
-  const achievements = deriveAchievements(stats, user.login);
   root.innerHTML = `
     <aside class="brittany-sidebar">
       ${user.avatar_url ? `<div class="avatar"><img src="${user.avatar_url}" alt="avatar" width="96" height="96"></div>` : ''}
@@ -297,14 +316,12 @@ function renderBrittany(root, user, repos, readmeHtml) {
       </section>
     </div>
   `;
-  renderAchievements(document.getElementById('achievements-brittany'), achievements);
+  renderAchievements(document.getElementById('achievements-brittany'), achievements || []);
   appendProjects(root.querySelector('#brittany-projects'), repos, 'brittany-card');
 }
 
-function renderCassie(root, user, repos, readmeHtml) {
+function renderCassie(root, user, repos, readmeHtml, achievements) {
   root.className = 'style-cassie';
-  const stats = computeStatsAndTech(repos, user);
-  const achievements = deriveAchievements(stats, user.login);
   root.innerHTML = `
     <section class="cassie-hero">
       ${user.avatar_url ? `<div class="avatar"><img src="${user.avatar_url}" alt="avatar" width="120" height="120"></div>` : ''}
@@ -328,14 +345,12 @@ function renderCassie(root, user, repos, readmeHtml) {
       </section>
     </section>
   `;
-  renderAchievements(document.getElementById('achievements-cassie'), achievements);
+  renderAchievements(document.getElementById('achievements-cassie'), achievements || []);
   appendProjects(root.querySelector('#cassie-projects'), repos, 'cassie-card');
 }
 
-function renderLee(root, user, repos, readmeHtml) {
+function renderLee(root, user, repos, readmeHtml, achievements) {
   root.className = 'style-lee';
-  const stats = computeStatsAndTech(repos, user);
-  const achievements = deriveAchievements(stats, user.login);
   root.innerHTML = `
     <section class="lee-hero">
       <div class="avatar">${user.avatar_url ? `<img src="${user.avatar_url}" alt="avatar" width="170" height="170">` : ''}</div>
@@ -361,7 +376,7 @@ function renderLee(root, user, repos, readmeHtml) {
       </section>
     </section>
   `;
-  renderAchievements(document.getElementById('achievements-lee'), achievements);
+  renderAchievements(document.getElementById('achievements-lee'), achievements || []);
   appendProjects(root.querySelector('#lee-projects'), repos, 'lee-card');
 }
 
@@ -436,6 +451,7 @@ copyBtn.addEventListener('click', () => {
     const repos = await fetchGitHubRepos(user);
     const readme = await fetchProfileReadme(user);
     const readmeHtml = mdToHtml(readme || '');
+    const achievements = await fetchUserAchievements(user);
 
     // Style-specific backgrounds and contrast
     if (style === 'brittany') {
@@ -443,21 +459,21 @@ copyBtn.addEventListener('click', () => {
       document.documentElement.style.setProperty('--text', '#ccd6f6');
       document.documentElement.style.setProperty('--muted', '#8892b0');
       document.body.style.background = '#0a192f';
-      renderBrittany(renderRoot, u, repos, readmeHtml);
+      renderBrittany(renderRoot, u, repos, readmeHtml, achievements);
     } else if (style === 'cassie') {
       // Purple/pink gradient, dark text for contrast
       document.documentElement.style.setProperty('--bg', 'transparent');
       document.documentElement.style.setProperty('--text', '#0b1b33');
       document.documentElement.style.setProperty('--muted', '#233a5c');
       document.body.style.background = 'conic-gradient(from 180deg at 50% 50%, #7c3aed, #ec4899, #f472b6)';
-      renderCassie(renderRoot, u, repos, readmeHtml);
+      renderCassie(renderRoot, u, repos, readmeHtml, achievements);
     } else {
       // Lee: dark navy -> teal -> cyan gradient with strong contrast
       document.documentElement.style.setProperty('--bg', 'transparent');
       document.documentElement.style.setProperty('--text', '#f8fafc');
       document.documentElement.style.setProperty('--muted', 'rgba(248,250,252,0.85)');
       document.body.style.background = 'linear-gradient(135deg, #0b1220 0%, #0e7490 50%, #22d3ee 100%)';
-      renderLee(renderRoot, u, repos, readmeHtml);
+      renderLee(renderRoot, u, repos, readmeHtml, achievements);
     }
   } catch (err) {
     console.error(err);
