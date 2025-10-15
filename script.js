@@ -24,6 +24,36 @@ async function fetchGitHubRepos(username) {
   if (!resp.ok) throw new Error(`GitHub API error: ${resp.status}`);
   return await resp.json();
 }
+/* Try to fetch profile README (username/username repo) */
+async function fetchProfileReadme(username) {
+  const candidates = [
+    `https://raw.githubusercontent.com/${username}/${username}/main/README.md`,
+    `https://raw.githubusercontent.com/${username}/${username}/master/README.md`
+  ];
+  for (const url of candidates) {
+    try {
+      const resp = await fetch(url);
+      if (resp.ok) {
+        const txt = await resp.text();
+        if (txt && txt.trim().length) return txt;
+      }
+    } catch {}
+  }
+  return null;
+}
+/* Minimal markdown to HTML (headings, paragraphs, links) */
+function mdToHtml(md) {
+  if (!md) return '';
+  let html = md
+    .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+    .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+    .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+    .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/gim, '<em>$1</em>')
+    .replace(/\[(.*?)\]\((.*?)\)/gim, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
+    .replace(/\n$/gim, '<br />');
+  return html;
+}
 
 /* Palette from avatar */
 async function derivePaletteFromAvatar(url) {
@@ -136,14 +166,21 @@ function appendProjects(container, repos, cardClass) {
 }
 
 /* Achievements (derived heuristics without scraping) */
-function deriveAchievements(stats) {
+function deriveAchievements(stats, username) {
   const a = [];
+  // Heuristic achievements
   if (stats.reposCount >= 30) a.push({ label: 'Prolific Creator', desc: `Created ${stats.reposCount}+ original repositories` });
-  if (stats.stars >= 100) a.push({ label: 'Starstruck', desc: `Accumulated ${stats.stars}+ stars across repositories` });
+  if (stats.stars >= 100) a.push({ label: 'Starstruck', desc: `Accumulated ${stats.stars}+ stars across repositories`, icon: 'https://github.githubassets.com/images/modules/profile/achievements/starstruck-default.png' });
   if (stats.forks >= 50) a.push({ label: 'Fork Friendly', desc: `Projects have been forked ${stats.forks}+ times` });
   if (stats.followers >= 50) a.push({ label: 'Community Builder', desc: `Followed by ${stats.followers}+ developers` });
   if (stats.techList.length >= 5) a.push({ label: 'Polyglot', desc: `Works across ${stats.techList.length}+ languages` });
-  // Always include top languages if any
+
+  // Specific known achievements (requested): public sponsor, quickdraw
+  if (username && username.toLowerCase() === 'luc-constantin') {
+    a.push({ label: 'Public Sponsor', desc: 'Supports open source with GitHub Sponsors', icon: 'https://github.githubassets.com/images/modules/profile/achievements/public_sponsor-default.svg' });
+    a.push({ label: 'Quickdraw', desc: 'Fast response in issues or PRs', icon: 'https://github.githubassets.com/images/modules/profile/achievements/quickdraw-default.png' });
+  }
+
   return a.length ? a : [{ label: 'Getting Started', desc: 'Building up your open-source journey' }];
 }
 
@@ -151,18 +188,19 @@ function renderAchievements(container, achievements) {
   container.innerHTML = '';
   achievements.forEach(item => {
     const badge = document.createElement('span');
-    badge.className = 'badge';
-    badge.innerHTML = `<span>${item.label}</span>`;
+    badge.className = 'achievement';
+    const iconHtml = item.icon ? `<img src="${item.icon}" alt="${item.label} icon">` : '';
+    badge.innerHTML = `${iconHtml}<span>${item.label}</span>`;
     badge.title = item.desc;
     container.appendChild(badge);
   });
 }
 
 /* Layout builders */
-function renderBrittany(root, user, repos) {
+function renderBrittany(root, user, repos, readmeHtml) {
   root.className = 'style-brittany';
   const stats = computeStatsAndTech(repos, user);
-  const achievements = deriveAchievements(stats);
+  const achievements = deriveAchievements(stats, user.login);
   root.innerHTML = `
     <aside class="brittany-sidebar">
       ${user.avatar_url ? `<div class="avatar"><img src="${user.avatar_url}" alt="avatar" width="96" height="96"></div>` : ''}
@@ -179,9 +217,10 @@ function renderBrittany(root, user, repos) {
         <h2>About</h2>
         <p>${user.bio || 'This user has no bio set on GitHub.'}</p>
       </section>
+      ${readmeHtml ? `<section><h2>Profile README</h2><div>${readmeHtml}</div></section>` : ''}
       <section>
         <h2>Achievements</h2>
-        <div class="tech-badges" id="achievements-brittany"></div>
+        <div class="achievements" id="achievements-brittany"></div>
       </section>
       <section>
         <h2>Checkout My Projects</h2>
@@ -193,10 +232,10 @@ function renderBrittany(root, user, repos) {
   appendProjects(root.querySelector('#brittany-projects'), repos, 'brittany-card');
 }
 
-function renderCassie(root, user, repos) {
+function renderCassie(root, user, repos, readmeHtml) {
   root.className = 'style-cassie';
   const stats = computeStatsAndTech(repos, user);
-  const achievements = deriveAchievements(stats);
+  const achievements = deriveAchievements(stats, user.login);
   root.innerHTML = `
     <section class="cassie-hero">
       ${user.avatar_url ? `<div class="avatar"><img src="${user.avatar_url}" alt="avatar" width="120" height="120"></div>` : ''}
@@ -210,21 +249,22 @@ function renderCassie(root, user, repos) {
     </section>
     <section class="cassie-content">
       <h2>Achievements</h2>
-      <div class="tech-badges" id="achievements-cassie"></div>
+      <div class="achievements" id="achievements-cassie"></div>
       <h2>Checkout My Projects</h2>
       <div class="cassie-projects" id="cassie-projects"></div>
       <h2>About</h2>
       <p>${user.bio || 'This user has no bio set on GitHub.'}</p>
+      ${readmeHtml ? `<h2>Profile README</h2><div>${readmeHtml}</div>` : ''}
     </section>
   `;
   renderAchievements(document.getElementById('achievements-cassie'), achievements);
   appendProjects(root.querySelector('#cassie-projects'), repos, 'cassie-card');
 }
 
-function renderLee(root, user, repos) {
+function renderLee(root, user, repos, readmeHtml) {
   root.className = 'style-lee';
   const stats = computeStatsAndTech(repos, user);
-  const achievements = deriveAchievements(stats);
+  const achievements = deriveAchievements(stats, user.login);
   root.innerHTML = `
     <section class="lee-hero">
       <div class="avatar">${user.avatar_url ? `<img src="${user.avatar_url}" alt="avatar" width="170" height="170">` : ''}</div>
@@ -240,11 +280,12 @@ function renderLee(root, user, repos) {
     </section>
     <section class="lee-content">
       <h2>Achievements</h2>
-      <div class="tech-badges" id="achievements-lee"></div>
+      <div class="achievements" id="achievements-lee"></div>
       <h2>Checkout My Projects</h2>
       <div class="lee-projects" id="lee-projects"></div>
       <h2>About</h2>
       <p>${user.bio || 'This user has no bio set on GitHub.'}</p>
+      ${readmeHtml ? `<h2>Profile README</h2><div>${readmeHtml}</div>` : ''}
     </section>
   `;
   renderAchievements(document.getElementById('achievements-lee'), achievements);
@@ -320,6 +361,8 @@ copyBtn.addEventListener('click', () => {
   try {
     const u = await fetchGitHubUser(user);
     const repos = await fetchGitHubRepos(user);
+    const readme = await fetchProfileReadme(user);
+    const readmeHtml = mdToHtml(readme || '');
 
     // Style-specific backgrounds and contrast
     if (style === 'brittany') {
@@ -327,21 +370,21 @@ copyBtn.addEventListener('click', () => {
       document.documentElement.style.setProperty('--text', '#ccd6f6');
       document.documentElement.style.setProperty('--muted', '#8892b0');
       document.body.style.background = '#0a192f';
-      renderBrittany(renderRoot, u, repos);
+      renderBrittany(renderRoot, u, repos, readmeHtml);
     } else if (style === 'cassie') {
       // Purple/pink gradient, dark text for contrast
       document.documentElement.style.setProperty('--bg', 'transparent');
       document.documentElement.style.setProperty('--text', '#0b1b33');
       document.documentElement.style.setProperty('--muted', '#233a5c');
       document.body.style.background = 'conic-gradient(from 180deg at 50% 50%, #7c3aed, #ec4899, #f472b6)';
-      renderCassie(renderRoot, u, repos);
+      renderCassie(renderRoot, u, repos, readmeHtml);
     } else {
       // Lee: dark navy -> teal -> cyan gradient with strong contrast
       document.documentElement.style.setProperty('--bg', 'transparent');
       document.documentElement.style.setProperty('--text', '#f8fafc');
       document.documentElement.style.setProperty('--muted', 'rgba(248,250,252,0.85)');
       document.body.style.background = 'linear-gradient(135deg, #0b1220 0%, #0e7490 50%, #22d3ee 100%)';
-      renderLee(renderRoot, u, repos);
+      renderLee(renderRoot, u, repos, readmeHtml);
     }
   } catch (err) {
     console.error(err);
