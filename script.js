@@ -260,31 +260,7 @@ function renderAchievements(container, achievements) {
     container.appendChild(badge);
   });
 }
-    if (u === 'momo5502') {
-      // Show 6 common achievements
-      a.push({ label: 'Pull Shark', desc: 'Merged pull requests', icon: 'https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png' });
-      a.push({ label: 'Quickdraw', desc: 'Fast response in issues or PRs', icon: 'https://github.githubassets.com/images/modules/profile/achievements/quickdraw-default.png' });
-      a.push({ label: 'Starstruck', desc: 'Repositories received stars', icon: 'https://github.githubassets.com/images/modules/profile/achievements/starstruck-default.png' });
-      a.push({ label: 'Galaxy Brain', desc: 'Created or contributed to repositories used by many', icon: 'https://github.githubassets.com/images/modules/profile/achievements/galaxy-brain-default.png' });
-      a.push({ label: 'Pair Extraordinaire', desc: 'Collaborates frequently', icon: 'https://github.githubassets.com/images/modules/profile/achievements/pair-extraordinaire-default.png' });
-      a.push({ label: 'YOLO', desc: 'Made bold changes', icon: 'https://github.githubassets.com/images/modules/profile/achievements/yolo-default.png' });
-    }
-  }
-
-  return a.length ? a : [{ label: 'Getting Started', desc: 'Building up your open-source journey' }];
-}
-
-function renderAchievements(container, achievements) {
-  container.innerHTML = '';
-  achievements.forEach(item => {
-    const badge = document.createElement('span');
-    badge.className = 'achievement';
-    const iconHtml = item.icon ? `<img src="${item.icon}" alt="${item.label} icon">` : '';
-    badge.innerHTML = `${iconHtml}<span>${item.label}</span>`;
-    badge.title = item.desc;
-    container.appendChild(badge);
-  });
-}
+    
 
 /* Layout builders */
 function renderBrittany(root, user, repos, readmeHtml, achievements) {
