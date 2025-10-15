@@ -58,6 +58,28 @@ async function derivePaletteFromAvatar(url) {
   });
 }
 
+/* Derived stats & technologies */
+function computeStatsAndTech(repos, user) {
+  const original = (repos || []).filter(r => !r.fork);
+  const totalStars = original.reduce((s, r) => s + (r.stargazers_count || 0), 0);
+  const totalForks = original.reduce((s, r) => s + (r.forks_count || 0), 0);
+  const languages = {};
+  original.forEach(r => {
+    if (r.language) languages[r.language] = (languages[r.language] || 0) + 1;
+  });
+  const techList = Object.entries(languages)
+    .sort((a,b)=>b[1]-a[1])
+    .map(([lang,count])=>`${lang} (${count})`);
+  return {
+    stars: totalStars,
+    forks: totalForks,
+    reposCount: original.length,
+    followers: user.followers || 0,
+    following: user.following || 0,
+    techList
+  };
+}
+
 /* Project cards */
 function appendProjects(container, repos, cardClass) {
   const featured = (repos || [])
@@ -82,8 +104,10 @@ function appendProjects(container, repos, cardClass) {
 /* Layout builders */
 function renderBrittany(root, user, repos) {
   root.className = 'style-brittany';
+  const stats = computeStatsAndTech(repos, user);
   root.innerHTML = `
     <aside class="brittany-sidebar">
+      ${user.avatar_url ? `<div class="avatar"><img src="${user.avatar_url}" alt="avatar" width="96" height="96"></div>` : ''}
       <h1 class="brittany-name">${user.name || user.login}</h1>
       <p class="brittany-tag">${user.company || user.location || ''}</p>
       <div class="brittany-socials">
@@ -98,7 +122,14 @@ function renderBrittany(root, user, repos) {
         <p>${user.bio || 'This user has no bio set on GitHub.'}</p>
       </section>
       <section>
-        <h2>Projects</h2>
+        <h2>My Github Stats && Technologies I use:</h2>
+        <p style="margin:6px 0;color:var(--muted);font-size:14px;">
+          Followers: ${stats.followers} • Following: ${stats.following} • Repos: ${stats.reposCount} • ⭐ ${stats.stars} • ⑂ ${stats.forks}
+        </p>
+        ${stats.techList.length ? `<p>${stats.techList.join(' • ')}</p>` : `<p>No languages detected from public repos.</p>`}
+      </section>
+      <section>
+        <h2>Checkout My Projects</h2>
         <div class="brittany-projects" id="brittany-projects"></div>
       </section>
     </div>
@@ -108,8 +139,10 @@ function renderBrittany(root, user, repos) {
 
 function renderCassie(root, user, repos) {
   root.className = 'style-cassie';
+  const stats = computeStatsAndTech(repos, user);
   root.innerHTML = `
     <section class="cassie-hero">
+      ${user.avatar_url ? `<div class="avatar"><img src="${user.avatar_url}" alt="avatar" width="120" height="120"></div>` : ''}
       <h1 class="cassie-title">${user.name || user.login}</h1>
       <p class="cassie-sub">${user.company || user.location || ''}</p>
       <div class="cassie-socials">
@@ -119,7 +152,12 @@ function renderCassie(root, user, repos) {
       </div>
     </section>
     <section class="cassie-content">
-      <h2>Featured Work</h2>
+      <h2>My Github Stats && Technologies I use:</h2>
+      <p style="margin:6px 0;color:#253b5a;font-size:14px;">
+        Followers: ${stats.followers} • Following: ${stats.following} • Repos: ${stats.reposCount} • ⭐ ${stats.stars} • ⑂ ${stats.forks}
+      </p>
+      ${stats.techList.length ? `<p style="color:#0b1b33;">${stats.techList.join(' • ')}</p>` : `<p>No languages detected from public repos.</p>`}
+      <h2>Checkout My Projects</h2>
       <div class="cassie-projects" id="cassie-projects"></div>
       <h2>About</h2>
       <p>${user.bio || 'This user has no bio set on GitHub.'}</p>
@@ -130,9 +168,10 @@ function renderCassie(root, user, repos) {
 
 function renderLee(root, user, repos) {
   root.className = 'style-lee';
+  const stats = computeStatsAndTech(repos, user);
   root.innerHTML = `
     <section class="lee-hero">
-      <div class="avatar">${user.avatar_url ? `<img src="${user.avatar_url}" alt="avatar" width="160" height="160">` : ''}</div>
+      <div class="avatar">${user.avatar_url ? `<img src="${user.avatar_url}" alt="avatar" width="170" height="170">` : ''}</div>
       <div>
         <h1 class="lee-title">${user.name || user.login}</h1>
         <p class="lee-sub">${user.company || user.location || ''}</p>
@@ -144,7 +183,12 @@ function renderLee(root, user, repos) {
       </div>
     </section>
     <section class="lee-content">
-      <h2>Projects</h2>
+      <h2>My Github Stats && Technologies I use:</h2>
+      <p style="margin:6px 0;color:var(--muted);font-size:14px;">
+        Followers: ${stats.followers} • Following: ${stats.following} • Repos: ${stats.reposCount} • ⭐ ${stats.stars} • ⑂ ${stats.forks}
+      </p>
+      ${stats.techList.length ? `<p>${stats.techList.join(' • ')}</p>` : `<p>No languages detected from public repos.</p>`}
+      <h2>Checkout My Projects</h2>
       <div class="lee-projects" id="lee-projects"></div>
       <h2>About</h2>
       <p>${user.bio || 'This user has no bio set on GitHub.'}</p>
