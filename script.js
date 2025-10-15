@@ -336,11 +336,11 @@ copyBtn.addEventListener('click', () => {
       document.body.style.background = 'conic-gradient(from 180deg at 50% 50%, #7c3aed, #ec4899, #f472b6)';
       renderCassie(renderRoot, u, repos);
     } else {
-      // Lee: refined indigo -> cyan gradient with improved contrast
+      // Lee: dark navy -> teal -> cyan gradient with strong contrast
       document.documentElement.style.setProperty('--bg', 'transparent');
-      document.documentElement.style.setProperty('--text', '#041224');
-      document.documentElement.style.setProperty('--muted', 'rgba(4,18,36,0.7)');
-      document.body.style.background = 'linear-gradient(135deg, #4f46e5, #22d3ee)';
+      document.documentElement.style.setProperty('--text', '#f8fafc');
+      document.documentElement.style.setProperty('--muted', 'rgba(248,250,252,0.85)');
+      document.body.style.background = 'linear-gradient(135deg, #0b1220 0%, #0e7490 50%, #22d3ee 100%)';
       renderLee(renderRoot, u, repos);
     }
   } catch (err) {
