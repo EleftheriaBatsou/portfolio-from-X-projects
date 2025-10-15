@@ -41,17 +41,70 @@ async function fetchProfileReadme(username) {
   }
   return null;
 }
-/* Minimal markdown to HTML (headings, paragraphs, links) */
+/* Conservative markdown to HTML (headings, links, code, paragraphs) */
 function mdToHtml(md) {
   if (!md) return '';
-  let html = md
-    .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-    .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-    .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-    .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
-    .replace(/\*(.*?)\*/gim, '<em>$1</em>')
-    .replace(/\[(.*?)\]\((.*?)\)/gim, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
-    .replace(/\n$/gim, '<br />');
+  const lines = md.split('\n');
+  let html = '';
+  let inCode = false;
+  let listOpen = false;
+
+  const linkify = (text) =>
+    text.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+
+  lines.forEach((raw) => {
+    const line = raw.replace(/\r$/, '');
+
+    // Code fences
+    if (line.trim().startsWith('```')) {
+      if (!inCode) {
+        html += '<pre><code>';
+        inCode = true;
+      } else {
+        html += '</code></pre>';
+        inCode = false;
+      }
+      return;
+    }
+    if (inCode) {
+      html += line.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '\n';
+      return;
+    }
+
+    // Headings ######
+    const m = line.match(/^(#{1,6})\s+(.*)$/);
+    if (m) {
+      const level = m[1].length;
+      const content = linkify(m[2]);
+      html += `<h${level}>${content}</h${level}>`;
+      return;
+    }
+
+    // Lists (simple)
+    const isListItem = /^\s*[-*]\s+/.test(line) || /^\s*\d+\.\s+/.test(line);
+    if (isListItem) {
+      const cleaned = line.replace(/^\s*[-*]\s+/, '').replace(/^\s*\d+\.\s+/, '');
+      if (!listOpen) {
+        html += '<ul>';
+        listOpen = true;
+      }
+      html += `<li>${linkify(cleaned)}</li>`;
+      return;
+    } else if (listOpen && line.trim() === '') {
+      html += '</ul>';
+      listOpen = false;
+      return;
+    }
+
+    // Paragraphs
+    if (line.trim().length) {
+      html += `<p>${linkify(line.trim())}</p>`;
+    }
+  });
+
+  if (inCode) html += '</code></pre>';
+  if (listOpen) html += '</ul>';
+
   return html;
 }
 
@@ -172,12 +225,11 @@ function deriveAchievements(stats, username) {
   if (stats.reposCount >= 30) a.push({ label: 'Prolific Creator', desc: `Created ${stats.reposCount}+ original repositories` });
   if (stats.stars >= 100) a.push({ label: 'Starstruck', desc: `Accumulated ${stats.stars}+ stars across repositories`, icon: 'https://github.githubassets.com/images/modules/profile/achievements/starstruck-default.png' });
   if (stats.forks >= 50) a.push({ label: 'Fork Friendly', desc: `Projects have been forked ${stats.forks}+ times` });
-  if (stats.followers >= 50) a.push({ label: 'Community Builder', desc: `Followed by ${stats.followers}+ developers` });
   if (stats.techList.length >= 5) a.push({ label: 'Polyglot', desc: `Works across ${stats.techList.length}+ languages` });
 
-  // Specific known achievements (requested): public sponsor, quickdraw
+  // Specific known achievements (requested): public sponsor and quickdraw for luc-constantin
   if (username && username.toLowerCase() === 'luc-constantin') {
-    a.push({ label: 'Public Sponsor', desc: 'Supports open source with GitHub Sponsors', icon: 'https://github.githubassets.com/images/modules/profile/achievements/public_sponsor-default.svg' });
+    a.push({ label: 'Public Sponsor', desc: 'Supports open source with GitHub Sponsors', icon: 'https://github.githubassets.com/images/modules/profile/achievements/public-sponsor-default.svg' });
     a.push({ label: 'Quickdraw', desc: 'Fast response in issues or PRs', icon: 'https://github.githubassets.com/images/modules/profile/achievements/quickdraw-default.png' });
   }
 
