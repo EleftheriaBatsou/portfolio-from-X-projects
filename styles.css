@@ -98,8 +98,8 @@ button { border: none; border-radius: 10px; padding: 10px 14px; font-weight: 700
 .lee-socials { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
 .lee-socials a { padding: 8px 12px; border-radius: 999px; background: rgba(255,255,255,0.18); color: #ffffff; font-weight: 700; backdrop-filter: saturate(120%) blur(4px); }
 .lee-content { padding: 28px; }
-.about-block { background: #8b5cf6; color: #0b1b33; border-radius: 12px; padding: 16px; }
-.about-block h1, .about-block h2, .about-block h3, .about-block h4, .about-block p { color: #0b1b33; }
+.style-lee .about-block { background: transparent; color: #f8fafc; }
+.style-lee .about-block h1, .style-lee .about-block h2, .style-lee .about-block h3, .style-lee .about-block h4, .style-lee .about-block p { color: #f8fafc; }
 .lee-projects { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
 .lee-card { border-radius: 16px; background: rgba(255,255,255,0.10); padding: 16px; backdrop-filter: saturate(110%) blur(2px); color: #f8fafc; }
 .lee-card h3 { margin: 0; font-size: 18px; font-weight: 600; color: #f8fafc; }

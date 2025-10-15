@@ -41,11 +41,15 @@ async function fetchProfileReadme(username) {
   }
   return null;
 }
-/* Conservative markdown to HTML (headings, links, code, paragraphs) */
+/* Conservative markdown to HTML (headings, links, code, paragraphs); strip images */
 function mdToHtml(md) {
   if (!md) return '';
-  // Sanitize specific phrases
-  const sanitized = md.replace(/Welcome to my GitHub portfolio!/gi, '');
+  // Sanitize specific phrases and strip image markdown/tags
+  let sanitized = md.replace(/Welcome to my GitHub portfolio!/gi, '');
+  // Remove image markdown ![alt](url)
+  sanitized = sanitized.replace(/!\[[^\]]*\]\([^\)]*\)/g, '');
+  // Remove raw <img ...> tags
+  sanitized = sanitized.replace(/<img[^>]*>/gi, '');
   const lines = sanitized.split('\n');
   let html = '';
   let inCode = false;
@@ -229,9 +233,21 @@ function deriveAchievements(stats, username) {
   if (stats.forks >= 50) a.push({ label: 'Fork Friendly', desc: `Projects have been forked ${stats.forks}+ times` });
   if (stats.techList.length >= 5) a.push({ label: 'Polyglot', desc: `Works across ${stats.techList.length}+ languages` });
 
-  // Specific known achievements for luc-constantin (Public Sponsor removed per request)
-  if (username && username.toLowerCase() === 'luc-constantin') {
-    a.push({ label: 'Quickdraw', desc: 'Fast response in issues or PRs', icon: 'https://github.githubassets.com/images/modules/profile/achievements/quickdraw-default.png' });
+  // Specific user mappings (attachments via GitHub asset URLs)
+  if (username) {
+    const u = username.toLowerCase();
+    if (u === 'luc-constantin') {
+      a.push({ label: 'Quickdraw', desc: 'Fast response in issues or PRs', icon: 'https://github.githubassets.com/images/modules/profile/achievements/quickdraw-default.png' });
+    }
+    if (u === 'momo5502') {
+      // Show 6 common achievements
+      a.push({ label: 'Pull Shark', desc: 'Merged pull requests', icon: 'https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png' });
+      a.push({ label: 'Quickdraw', desc: 'Fast response in issues or PRs', icon: 'https://github.githubassets.com/images/modules/profile/achievements/quickdraw-default.png' });
+      a.push({ label: 'Starstruck', desc: 'Repositories received stars', icon: 'https://github.githubassets.com/images/modules/profile/achievements/starstruck-default.png' });
+      a.push({ label: 'Galaxy Brain', desc: 'Created or contributed to repositories used by many', icon: 'https://github.githubassets.com/images/modules/profile/achievements/galaxy-brain-default.png' });
+      a.push({ label: 'Pair Extraordinaire', desc: 'Collaborates frequently', icon: 'https://github.githubassets.com/images/modules/profile/achievements/pair-extraordinaire-default.png' });
+      a.push({ label: 'YOLO', desc: 'Made bold changes', icon: 'https://github.githubassets.com/images/modules/profile/achievements/yolo-default.png' });
+    }
   }
 
   return a.length ? a : [{ label: 'Getting Started', desc: 'Building up your open-source journey' }];
