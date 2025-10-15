@@ -44,7 +44,9 @@ async function fetchProfileReadme(username) {
 /* Conservative markdown to HTML (headings, links, code, paragraphs) */
 function mdToHtml(md) {
   if (!md) return '';
-  const lines = md.split('\n');
+  // Sanitize specific phrases
+  const sanitized = md.replace(/Welcome to my GitHub portfolio!/gi, '');
+  const lines = sanitized.split('\n');
   let html = '';
   let inCode = false;
   let listOpen = false;
@@ -227,9 +229,8 @@ function deriveAchievements(stats, username) {
   if (stats.forks >= 50) a.push({ label: 'Fork Friendly', desc: `Projects have been forked ${stats.forks}+ times` });
   if (stats.techList.length >= 5) a.push({ label: 'Polyglot', desc: `Works across ${stats.techList.length}+ languages` });
 
-  // Specific known achievements (requested): public sponsor and quickdraw for luc-constantin
+  // Specific known achievements for luc-constantin (Public Sponsor removed per request)
   if (username && username.toLowerCase() === 'luc-constantin') {
-    a.push({ label: 'Public Sponsor', desc: 'Supports open source with GitHub Sponsors', icon: 'https://github.githubassets.com/images/modules/profile/achievements/public-sponsor-default.svg' });
     a.push({ label: 'Quickdraw', desc: 'Fast response in issues or PRs', icon: 'https://github.githubassets.com/images/modules/profile/achievements/quickdraw-default.png' });
   }
 
