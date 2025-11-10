@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Notes — Colorful</title>
+  <meta name="description" content="A colorful, minimalist note taking app. Notes are stored locally in your browser." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="notes-header">
+    <a class="brand" href="../index.html">BRISQ</a>
+    <div class="actions">
+      <div class="search">
+        <input id="search" type="text" placeholder="Search notes…" />
+      </div>
+      <button id="newNote" class="button">New</button>
+      <div class="menu">
+        <button id="more" class="icon-btn" title="More">⋯</button>
+        <div id="menuSheet" class="sheet hidden">
+          <button id="exportNotes" class="sheet-item">Export (.json)</button>
+          <label class="sheet-item file">
+            Import (.json)
+            <input id="importNotes" type="file" accept="application/json" />
+          </label>
+          <button id="clearNotes" class="sheet-item danger">Clear all</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="composer" class="composer hidden">
+      <input id="titleInput" class="title-input" placeholder="Title" />
+      <textarea id="bodyInput" class="body-input" rows="5" placeholder="Write a note…"></textarea>
+      <div class="composer-toolbar">
+        <div class="color-palette" id="colorPalette">
+          <button data-color="grape" class="swatch grape active" title="Grape"></button>
+          <button data-color="sun" class="swatch sun" title="Sun"></button>
+          <button data-color="aqua" class="swatch aqua" title="Aqua"></button>
+          <button data-color="mint" class="swatch mint" title="Mint"></button>
+          <button data-color="flame" class="swatch flame" title="Flame"></button>
+          <button data-color="orchid" class="swatch orchid" title="Orchid"></button>
+        </div>
+        <div class="right">
+          <button id="cancelCompose" class="button ghost">Cancel</button>
+          <button id="saveNote" class="button">Save</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="empty" class="empty-state">
+      <div class="empty-card">
+        <h2>Capture ideas fast</h2>
+        <p>Click “New” to create a colorful note. Everything is saved locally in your browser.</p>
+        <button id="startNew" class="button">New note</button>
+      </div>
+    </section>
+
+    <section id="grid" class="notes-grid"></section>
+  </main>
+
+  <template id="noteTmpl">
+    <article class="note">
+      <div class="note-bg"></div>
+      <div class="note-content">
+        <div class="note-meta">
+          <time class="date"></time>
+          <div class="note-actions">
+            <button class="icon-btn pin" title="Pin">📌</button>
+            <button class="icon-btn edit" title="Edit">✏️</button>
+            <button class="icon-btn delete" title="Delete">🗑️</button>
+          </div>
+        </div>
+        <h3 class="note-title"></h3>
+        <p class="note-body"></p>
+      </div>
+    </article>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
