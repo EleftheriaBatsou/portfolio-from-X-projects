@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Prasoon Mahawar — Portfolio</title>
+  <meta name="description" content="Prasoon Mahawar — Machine Learning Engineer, FullStack Engineer, F1 Enthusiast."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css"/>
+</head>
+<body>
+  <canvas id="bg"></canvas>
+
+  <header class="site-header">
+    <div class="brand">
+      <div class="avatar">
+        <img src="https://avatars.githubusercontent.com/u/52622674?v=4" alt="Prasoon Mahawar"/>
+      </div>
+      <div class="titles">
+        <h1>Prasoon Mahawar</h1>
+        <p class="subtitle">Machine Learning Engineer • FullStack Engineer • F1 Enthusiast</p>
+      </div>
+    </div>
+    <div class="actions">
+      <a class="btn primary" href="mailto:prasoonmahawar21@gmail.com">Email Me</a>
+      <a class="btn outline" href="https://peerlist.io/prasoon21/resume" target="_blank" rel="noopener">Resume</a>
+      <button class="btn ghost" id="themeToggle" aria-label="Toggle theme">☾</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero section">
+      <div class="hero-content">
+        <h2 class="hero-title">Building elegant systems, shipping useful AI, and having fun doing it.</h2>
+        <p class="hero-desc">
+          I craft robust, scalable products across the stack, and apply machine learning to solve practical problems —
+          from AI text detection to resume optimization. Currently pursuing MSc (AI & ML) at LJMU.
+        </p>
+        <div class="socials">
+          <a href="https://linkedin.com/in/prasoonmahawar" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://twitter.com/prasoon_mhwr" target="_blank" rel="noopener">Twitter</a>
+          <a href="https://github.com/prasoonmhwr" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="orb"></div>
+        <div class="glass-card tilt">
+          <h3>Now</h3>
+          <p>MLE — 2025 • MSc (AI&ML), LJMU</p>
+          <p>Exploring foundation models, RAG systems, and developer tooling.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="featured section">
+      <div class="section-header">
+        <h3>Featured Work</h3>
+        <p>Selected projects that blend engineering depth with product polish.</p>
+      </div>
+      <div class="cards">
+        <article class="card tilt">
+          <div class="card-header">
+            <h4>SudoResume</h4>
+            <span class="chip">Product</span>
+          </div>
+          <p class="card-desc">AI-powered platform for ATS-friendly and optimized resumes.</p>
+          <div class="stack">
+            <span>Next.js</span><span>TypeScript</span><span>Tailwind</span><span>Prisma</span><span>LangChain</span>
+          </div>
+          <div class="card-actions">
+            <a class="btn small primary" href="https://sudoresume.com/" target="_blank" rel="noopener">Website</a>
+          </div>
+        </article>
+
+        <article class="card tilt">
+          <div class="card-header">
+            <h4>AI Text Detection</h4>
+            <span class="chip">Model</span>
+          </div>
+          <p class="card-desc">Fine-tuned RoBERTa model for detecting AI-generated text.</p>
+          <div class="stack">
+            <span>PyTorch</span><span>Python</span><span>Pandas</span><span>Deep Learning</span>
+          </div>
+          <div class="card-actions">
+            <a class="btn small primary" href="https://huggingface.co/prasoonmhwr/ai_detection_model" target="_blank" rel="noopener">Model</a>
+          </div>
+        </article>
+
+        <article class="card tilt">
+          <div class="card-header">
+            <h4>Melanoma Detection</h4>
+            <span class="chip">Research</span>
+          </div>
+          <p class="card-desc">CNN-based model to detect melanoma with accuracy of 0.81.</p>
+          <div class="stack">
+            <span>TensorFlow</span><span>Python</span><span>Keras</span><span>Pandas</span>
+          </div>
+          <div class="card-actions">
+            <a class="btn small" href="https://github.com/prasoonmhwr/Malenoma_Detection_Assignment" target="_blank" rel="noopener">Source</a>
+          </div>
+        </article>
+
+        <article class="card tilt">
+          <div class="card-header">
+            <h4>QuickTag</h4>
+            <span class="chip">SaaS</span>
+          </div>
+          <p class="card-desc">Static & dynamic QR codes with analytics; RAG-enabled.</p>
+          <div class="stack">
+            <span>Next.js</span><span>TypeScript</span><span>tRPC</span><span>Prisma</span><span>LangChain</span>
+          </div>
+          <div class="card-actions">
+            <a class="btn small primary" href="https://quicktag.fyi/" target="_blank" rel="noopener">Website</a>
+            <a class="btn small" href="https://github.com/prasoonmhwr/quick-tag" target="_blank" rel="noopener">Source</a>
+          </div>
+        </article>
+
+        <article class="card tilt">
+          <div class="card-header">
+            <h4>Prompt Forge</h4>
+            <span class="chip">Tool</span>
+          </div>
+          <p class="card-desc">Web app to improve prompts for better LLM results.</p>
+          <div class="stack">
+            <span>Next.js</span><span>TypeScript</span><span>Tailwind</span><span>LangChain</span>
+          </div>
+          <div class="card-actions">
+            <a class="btn small primary" href="https://prompt-forge-v1.vercel.app/" target="_blank" rel="noopener">Website</a>
+          </div>
+        </article>
+      </div>
+
+      <div class="more-projects">
+        <a class="btn outline" href="https://projects.prasoon-mahawar.dev/" target="_blank" rel="noopener">More Projects</a>
+      </div>
+    </section>
+
+    <section class="experience section">
+      <div class="section-header">
+        <h3>Experience</h3>
+        <p>Highlights across product, platform, and ML.</p>
+      </div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <h4>MLE — 2025 • Present</h4>
+            <p>Researching foundation models and building applied ML systems.</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <h4>Agilité — Sr. Software Developer (2023–2024)</h4>
+            <p>FullStack product development with TypeScript/React/Next.js and Postgres.</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <h4>Maximl Labs — Sr. Software Developer (2021–2022)</h4>
+            <p>Built industrial SaaS features; improved performance and UX.</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <h4>Oracle — Staff Consultant (2018–2021)</h4>
+            <p>Consulting and delivery across enterprise stacks.</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <h4>ASM — Associate Consultant (2017–2018)</h4>
+            <p>Early-career contributions to engineering projects.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="education section">
+      <div class="section-header">
+        <h3>Education</h3>
+        <p>Formal training and continuous learning.</p>
+      </div>
+      <div class="edu-grid">
+        <div class="edu-card tilt">
+          <h4>LJMU</h4>
+          <p>MSc (AI & ML), 2023–2025</p>
+        </div>
+        <div class="edu-card tilt">
+          <h4>Bachelor’s in Computer Science</h4>
+          <p>2013–2017</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="skills section">
+      <div class="section-header">
+        <h3>Skills</h3>
+        <p>Tools and technologies I use regularly.</p>
+      </div>
+      <div class="chips">
+        <span>JavaScript</span><span>TypeScript</span><span>Python</span><span>React</span><span>Next.js</span>
+        <span>Postgres</span><span>Prisma</span><span>SQL</span><span>TensorFlow</span><span>PyTorch</span>
+        <span>ML</span><span>DL</span><span>NumPy</span><span>Pandas</span><span>Three.js</span><span>LangChain</span>
+      </div>
+    </section>
+
+    <section class="cta section">
+      <div class="cta-card tilt">
+        <h3>Let’s build something that matters.</h3>
+        <p>Available for hire. Open to ML research engineering, full-stack product roles, and developer tooling.</p>
+        <div class="cta-actions">
+          <a class="btn primary" href="mailto:prasoonmahawar21@gmail.com">Get in touch</a>
+          <a class="btn" href="https://linkedin.com/in/prasoonmahawar" target="_blank" rel="noopener">Connect</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© <span id="year"></span> Prasoon Mahawar • Built <a href="https://go.cosine.sh/elef" target="_blank" rel="noopener">with care</a> and a touch of speed — F1 style.</p>
+    <div class="footer-socials">
+      <a href="https://linkedin.com/in/prasoonmahawar" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://twitter.com/prasoon_mhwr" target="_blank" rel="noopener">Twitter</a>
+      <a href="https://github.com/prasoonmhwr" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </footer>
+
+  <script src="./script.js"></script>
+</body>
+</html>
