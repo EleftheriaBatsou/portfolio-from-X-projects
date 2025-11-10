@@ -1,0 +1,150 @@
+/* Colorful notes UI, designed to complement assets/styles.css */
+
+:root {
+  --note-radius: 16px;
+  --note-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+
+.notes-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 12px 14px;
+}
+
+.search {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #0b1218;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 8px 10px;
+  color: var(--muted);
+  min-width: 260px;
+}
+.search input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text);
+  width: 100%;
+  font-size: 14px;
+}
+.filters { display: inline-flex; gap: 8px; margin-left: 12px; }
+.chip {
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--muted);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.chip.active, .chip:hover { color: var(--text); border-color: var(--accent); }
+
+.composer {
+  margin-top: 16px;
+  background: linear-gradient(180deg, #121a23, #0f151c);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 12px;
+  box-shadow: var(--note-shadow);
+}
+.composer .title, .composer .content {
+  width: 100%;
+  background: #0b1218;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  color: var(--text);
+  margin-bottom: 8px;
+  outline: none;
+}
+.composer .title { font-size: 16px; font-weight: 600; }
+.composer .content { font-size: 14px; resize: vertical; min-height: 96px; }
+.composer .title:focus, .composer .content:focus { border-color: var(--accent); }
+.composer-footer { display: flex; align-items: center; gap: 10px; }
+.palette { display: flex; gap: 8px; flex-wrap: wrap; }
+.swatch {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--sw);
+  border: 2px solid #0b0f14;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,.25);
+  transition: transform .06s ease;
+}
+.swatch:hover { transform: translateY(-1px); }
+.spacer { flex: 1; }
+
+.notes-grid {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+@media (max-width: 980px) { .notes-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .notes-grid { grid-template-columns: 1fr; } }
+
+.note {
+  position: relative;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--note-radius);
+  padding: 14px;
+  box-shadow: var(--note-shadow);
+  transition: transform .08s ease, border-color .2s ease, box-shadow .2s ease;
+  overflow: hidden;
+}
+.note:hover { transform: translateY(-2px); border-color: var(--accent); }
+.note .pin {
+  position: absolute; top: 10px; right: 10px;
+  background: rgba(0,0,0,.25); backdrop-filter: blur(6px);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.note .title { font-size: 16px; font-weight: 700; margin: 0 0 6px; }
+.note .body { font-size: 14px; color: #0b0f14; background: rgba(255,255,255,.96); border-radius: 8px; padding: 10px; }
+.note .meta { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 12px; color: var(--muted); }
+.note .actions { display: flex; gap: 8px; }
+.note .action {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #0b1218;
+  color: var(--text);
+  font-size: 12px;
+  padding: 6px 8px;
+  cursor: pointer;
+}
+
+.empty {
+  margin: 20px 0 40px;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* Colored headers for notes */
+.note[data-color] .title {
+  color: #0b0f14;
+  background: color-mix(in oklab, var(--note-color) 70%, white 0%);
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+.note[data-color] { border-color: color-mix(in oklab, var(--note-color) 35%, black 0%); }
+.note[data-color] .pin { background: color-mix(in oklab, var(--note-color) 30%, #0b1218 70%); }
+
+kbd {
+  border: 1px solid var(--border);
+  padding: 1px 6px;
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
